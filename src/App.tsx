@@ -3,13 +3,30 @@ import heroImg from './assets/hero.png'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import './App.css'
+import styled from 'styled-components'
+import { Button } from 'antd';
+
+interface PStyledLink {
+  $isBlue?: boolean;
+  isBlue?: boolean;
+}
+
+const StyledLink = styled.div<PStyledLink>`
+  color: ${({ $isBlue, isBlue }) => ($isBlue || isBlue ? 'blue' : 'pink')};
+  font-weight: bold;
+
+  h1,
+  p {
+    color: inherit;
+  }
+`;
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-      <section id="center">
+      <StyledLink id="center" $isBlue={count <= 4}>
         <div className="hero">
           <img src={heroImg} className="base" width="170" height="179" alt="" />
           <img src={reactLogo} className="framework" alt="React logo" />
@@ -21,14 +38,14 @@ function App() {
             Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
           </p>
         </div>
-        <button
-          type="button"
+        <Button
+          type="primary"
           className="counter"
           onClick={() => setCount((count) => count + 1)}
         >
           Count is {count}
-        </button>
-      </section>
+        </Button>
+      </StyledLink>
 
       <div className="ticks"></div>
 
