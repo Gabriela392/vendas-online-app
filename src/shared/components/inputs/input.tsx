@@ -1,25 +1,17 @@
-import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
-import type { InputProps as InputPropsAntd } from 'antd';
+import { Input as InputAntd, type InputProps as InputPropsAntd } from 'antd';
 
-import { BoxInput, InputPasswordStyled, InputStyled, TitleInput } from './input.styles';
+import { BoxInput, TitleInput } from './input.styles';
 
 interface InputProps extends InputPropsAntd {
   title?: string;
   margin?: string;
 }
-
-const Input = ({ title, margin, type, ...props }: InputProps) => {
+ 
+const Input = ({ title, margin, ...props }: InputProps) => {
   return (
-    <BoxInput style={{ margin }}>
+    <BoxInput style={{margin}}>
       {title && <TitleInput>{title}</TitleInput>}
-      {type === 'password' ? (
-        <InputPasswordStyled
-          iconRender={(visible) => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
-          {...props}
-        />
-      ) : (
-        <InputStyled type={type} {...props} />
-      )}
+      <InputAntd {...props} />
     </BoxInput>
   );
 };
