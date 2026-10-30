@@ -1,10 +1,13 @@
-import type { RouteObject } from 'react-router-dom';
+import type { RouteObject } from "react-router-dom";
+import LoginScreen from "./screens/LoginScreen";
 
-import LoginScreen from '../screens/LoginScreen';
+export const LoginRouteEnum = {
+  LOGIN: '/login',
+} as const;
 
 export const loginRoutes: RouteObject[] = [
   {
-    path: '/login',
+    path: LoginRouteEnum.LOGIN,
     element: <LoginScreen />,
   },
 ];

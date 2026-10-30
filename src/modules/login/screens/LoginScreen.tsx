@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { LogoImage } from '../styles/loginScreen.styles';
-import Button from '../../shared/components/buttons/button/button'; 
-import Input from '../../shared/components/inputs/input'; 
-import { useGlobalContext } from '../../shared/hooks/useGlobalContext'; 
-import { useRequests } from '../../shared/hooks/useRequests'; 
+import Button from '../../../shared/components/buttons/button/button'; 
+import Input from '../../../shared/components/inputs/input'; 
+import { useRequests } from '../../../shared/hooks/useRequests'; 
 import {
   BackgroundImage,
   ContainerLogin,
@@ -11,13 +10,11 @@ import {
   LimitedContainer,
   TitleLogin,
 } from '../styles/loginScreen.styles';
-import type { UserType } from '../login/types/UserType';
 
 const LoginScreen = () => {
-  const { accessToken, setAccessToken } = useGlobalContext();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { postRequest, loading } = useRequests();
+  const { authRequest, loading } = useRequests();
 
   const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -27,13 +24,13 @@ const LoginScreen = () => {
     setPassword(event.target.value);
   };
 
-    const handleLogin = async () => {
-    const user = await postRequest<UserType>('http://localhost:8080/auth', {
+    const handleLogin = () => {
+    authRequest({
       email: email,
       password: password,
     });
     
-        setAccessToken(user?.accessToken || '');
+
   };
 
   return (
@@ -42,7 +39,7 @@ const LoginScreen = () => {
         <LimitedContainer>
           <LogoImage src="./logo.png" />
           <TitleLogin level={2} type="secondary">
-            LOGIN ({accessToken})
+            LOGIN 
           </TitleLogin>
           <Input title="USUÁRIO" margin="32px 0px 0px" onChange={handleEmail} value={email} />
           <Input
