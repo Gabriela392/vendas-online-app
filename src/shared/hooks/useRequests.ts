@@ -1,14 +1,12 @@
-import axios from 'axios';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { connectionAPIPost } from '../functions/connection/connectionAPI';
-import { useGlobalContext } from './useGlobalContext';
-import { setAuthorizationToken } from '../functions/connection/auth';
-import { ProductRoutesEnum } from '../../modules/products/routes';
-import { ERROR_INVALID_PASSWORD } from '../constants/errorsStatus';
-import type { AuthType } from '../../modules/login/types/AuthType';
-import { URL_AUTH } from './urls';
-
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import type { AuthType } from "../../modules/login/types/AuthType";
+import { ProductRoutesEnum } from "../../modules/products/routes";
+import { ERROR_INVALID_PASSWORD } from "../constants/errorsStatus";
+import { setAuthorizationToken } from "../functions/connection/auth";
+import ConnectionAPI, { type MethodType, connectionAPIPost } from "../functions/connection/connectionAPI";
+import { URL_AUTH } from "./urls";
+import { useGlobalContext } from "./useGlobalContext";
 
 
 export const useRequests = () => {
@@ -16,18 +14,29 @@ export const useRequests = () => {
   const navigate = useNavigate();
   const { setNotification, setUser } = useGlobalContext();
 
-  const getRequest = async (url: string) => {
+  const request = async <T>(
+    url: string,
+    method: MethodType,
+    saveGlobal?: (object: T) => void,
+    body?: unknown,
+  ): Promise<T | undefined> => {
     setLoading(true);
-    return await axios({
-      method: 'get',
-      url: url,
-    })
+
+    const returnObject: T | undefined = await ConnectionAPI.connect<T>(url, method, body)
       .then((result) => {
-        return result.data;
+        if (saveGlobal) {
+          saveGlobal(result);
+        }
+        return result;
       })
-      .catch(() => {
-        alert('Erro');
+      .catch((error: Error) => {
+        setNotification(error.message, 'error');
+        return undefined;
       });
+
+    setLoading(false);
+
+    return returnObject;
   };
 
   const postRequest = async <T>(url: string, body: unknown): Promise<T | undefined> => {
@@ -46,25 +55,28 @@ export const useRequests = () => {
     return returnData;
   };
 
-  const authRequest = async (body: unknown): Promise<void>=> {
+  const authRequest = async (body: unknown): Promise<void> => {
     setLoading(true);
 
     await connectionAPIPost<AuthType>(URL_AUTH, body)
-    .then((result) => {
-      setUser(result.user);
-      setAuthorizationToken(result.accessToken);
-      navigate(ProductRoutesEnum.PRODUCT);
-    })
-    .catch(() => {
-      setNotification(ERROR_INVALID_PASSWORD, 'error');
-      return undefined;
-    })
-  }
+      .then((result) => {
+        setUser(result.user);
+        setAuthorizationToken(result.accessToken);
+        navigate(ProductRoutesEnum.PRODUCT);
+        return result;
+      })
+      .catch(() => {
+        setNotification(ERROR_INVALID_PASSWORD, 'error');
+        return undefined;
+      });
+
+    setLoading(false);
+  };
 
   return {
     loading,
     authRequest,
-    getRequest,
+    request,
     postRequest,
   };
 };
