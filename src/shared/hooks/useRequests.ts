@@ -1,17 +1,20 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import type { AuthType } from "../../modules/login/types/AuthType";
-import { ProductRoutesEnum } from "../../modules/products/routes";
-import { ERROR_INVALID_PASSWORD } from "../constants/errorsStatus";
-import { setAuthorizationToken } from "../functions/connection/auth";
-import ConnectionAPI, { type MethodType, connectionAPIPost } from "../functions/connection/connectionAPI";
-import { URL_AUTH } from "./urls";
-import { useGlobalContext } from "./useGlobalContext";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
+import type { AuthType } from '../../modules/login/types/AuthType';
+
+import { URL_AUTH } from '../constants/urls';
+import { setAuthorizationToken } from '../functions/connection/auth';
+import ConnectionAPI, {
+  connectionAPIPost,
+  type MethodType,
+} from '../functions/connection/connectionAPI';
+import { useGlobalContext } from './useGlobalContext';
+import { ProductRoutesEnum } from '../../modules/products/routes';
+import { ERROR_INVALID_PASSWORD } from '../constants/errorsStatus';
 
 export const useRequests = () => {
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const { setNotification, setUser } = useGlobalContext();
 
   const request = async <T>(
@@ -39,8 +42,8 @@ export const useRequests = () => {
     return returnObject;
   };
 
-
   const authRequest = async (body: unknown): Promise<void> => {
+    const navigate = useNavigate();
     setLoading(true);
 
     await connectionAPIPost<AuthType>(URL_AUTH, body)

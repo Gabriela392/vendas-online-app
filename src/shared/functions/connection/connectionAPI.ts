@@ -9,9 +9,10 @@ export type MethodType = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
 export default class ConnectionAPI {
   static async call<T>(url: string, method: MethodType, body?: unknown): Promise<T> {
+    const token = getAuthorizationToken();
     const config: AxiosRequestConfig = {
       headers: {
-        Authorization: getAuthorizationToken(),
+        ...(token ? { Authorization: token } : {}),
         'Content-Type': 'application/json',
       },
     };
