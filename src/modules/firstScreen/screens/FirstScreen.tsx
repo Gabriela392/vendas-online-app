@@ -1,19 +1,17 @@
 import { Spin } from 'antd';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LoginRouteEnum } from '../../login/routes'
-import { ProductRoutesEnum } from '../../products/routes'; 
-import { getAuthorizationToken } from '../../../shared/functions/connection/auth';
+
+import { useGlobalContext } from '../../../shared/hooks/useGlobalContext';
+import { ProductRoutesEnum } from '../../products/routes';
 
 const FirstScreen = () => {
+  const { user } = useGlobalContext();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = getAuthorizationToken();
-    if (token) {
+    if (user) {
       navigate(ProductRoutesEnum.PRODUCT);
-    } else {
-      navigate(LoginRouteEnum.LOGIN);
     }
   }, []);
 
