@@ -1,9 +1,20 @@
-import { useGlobalContext } from "../../../shared/hooks/useGlobalContext";
+import { useEffect } from 'react';
+
+import { MethodsEnum } from '../../../shared/enums/methods.enum';
+import { URL_PRODUCT } from '../../../shared/hooks/urls';
+import { useDataContext } from '../../../shared/hooks/useDataContext';
+import { useRequests } from '../../../shared/hooks/useRequests';
+import type { ProductType } from '../types/ProductType';
 
 const Product = () => {
-    const { user } = useGlobalContext();
+  const { products, setProducts } = useDataContext();
+  const { request } = useRequests();
 
-    return <div>{`Produtos ${user?.name || 'Usuário'}`}</div>
+  useEffect(() => {
+    request<ProductType[]>(URL_PRODUCT, MethodsEnum.GET, setProducts);
+  }, []);
+
+  return products.map((product: ProductType) => <div key={product.id}>{product.name}</div>);
 };
 
 export default Product;
