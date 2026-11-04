@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from 'react';
 import type { ProductType } from '../../modules/products/types/ProductType';
+import { bakeryProductsMock } from '../../modules/products/mocks/products.mock';
 
 interface DataContext {
   products?: ProductType[];
@@ -17,7 +18,9 @@ interface DataProviderProps {
 }
 
 export const DataProvider = ({ children }: DataProviderProps) => {
-  const [data, setData] = useState<DataContext>({});
+  const [data, setData] = useState<DataContext>({
+    products: bakeryProductsMock,
+  });
 
   return <DataContext.Provider value={{ data, setData }}>{children}</DataContext.Provider>;
 };
