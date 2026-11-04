@@ -1,8 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { LogoImage } from '../styles/loginScreen.styles';
-import Button from '../../../shared/components/buttons/button/button'; 
-import Input from '../../../shared/components/inputs/input'; 
-import { useRequests } from '../../../shared/hooks/useRequests'; 
+import Button from '../../../shared/components/buttons/button/button';
+import Input from '../../../shared/components/inputs/input';
+import { ProductRoutesEnum } from '../../products/routes';
+import { useRequests } from '../../../shared/hooks/useRequests';
 import {
   BackgroundImage,
   ContainerLogin,
@@ -15,6 +18,7 @@ const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { authRequest, loading } = useRequests();
+  const navigate = useNavigate();
 
   const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -24,13 +28,11 @@ const LoginScreen = () => {
     setPassword(event.target.value);
   };
 
-    const handleLogin = () => {
-    authRequest({
-      email: email,
-      password: password,
-    });
-    
-
+  const handleLogin = async () => {
+    const authenticated = await authRequest({ email, password });
+    if (authenticated) {
+      navigate(ProductRoutesEnum.PRODUCT);
+    }
   };
 
   return (
@@ -39,7 +41,7 @@ const LoginScreen = () => {
         <LimitedContainer>
           <LogoImage src="./logo.png" />
           <TitleLogin level={2} type="secondary">
-            LOGIN 
+            LOGIN
           </TitleLogin>
           <Input title="USUÁRIO" margin="32px 0px 0px" onChange={handleEmail} value={email} />
           <Input

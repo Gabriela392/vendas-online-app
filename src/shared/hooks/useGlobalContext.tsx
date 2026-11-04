@@ -1,4 +1,11 @@
-import { createContext, useContext, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from 'react';
 import type { UserType } from '../../modules/login/types/UserType';
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
@@ -15,7 +22,7 @@ interface GlobalData {
 }
 interface GlobalContextProps {
   globalData: GlobalData;
-  setGlobalData: (globalData: GlobalData) => void;
+  setGlobalData: Dispatch<SetStateAction<GlobalData>>;
 }
 
 const GlobalContext = createContext({} as GlobalContextProps);
@@ -39,23 +46,29 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
 export const useGlobalContext = () => {
   const { globalData, setGlobalData } = useContext(GlobalContext);
 
-  const setNotification = (message: string, type: NotificationType, description?: string) => {
-    setGlobalData({
-      ...globalData,
-      notification: {
-        message,
-        type,
-        description,
-      },
-    });
-  };
+  const setNotification = useCallback(
+    (message: string, type: NotificationType, description?: string) => {
+      setGlobalData((currentData) => ({
+        ...currentData,
+        notification: {
+          message,
+          type,
+          description,
+        },
+      }));
+    },
+    [setGlobalData],
+  );
 
-  const setUser = (user: UserType) => {
-    setGlobalData({
-      ...globalData,
-      user,
-    });
-  }
+  const setUser = useCallback(
+    (user: UserType) => {
+      setGlobalData((currentData) => ({
+        ...currentData,
+        user,
+      }));
+    },
+    [setGlobalData],
+  );
 
   return {
     notification: globalData?.notification,

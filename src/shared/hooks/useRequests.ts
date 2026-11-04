@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useCallback, useState } from 'react';
 
 import type { AuthType } from '../../modules/login/types/AuthType';
 
@@ -10,56 +9,59 @@ import ConnectionAPI, {
   type MethodType,
 } from '../functions/connection/connectionAPI';
 import { useGlobalContext } from './useGlobalContext';
-import { ProductRoutesEnum } from '../../modules/products/routes';
-import { ERROR_INVALID_PASSWORD } from '../constants/errorsStatus';
+import { ERROR_CONNECTION, ERROR_INVALID_PASSWORD } from '../constants/errorsStatus';
 
 export const useRequests = () => {
   const [loading, setLoading] = useState(false);
   const { setNotification, setUser } = useGlobalContext();
 
-  const request = async <T>(
-    url: string,
-    method: MethodType,
-    saveGlobal?: (object: T) => void,
-    body?: unknown,
-  ): Promise<T | undefined> => {
-    setLoading(true);
+  const request = useCallback(
+    async <T>(
+      url: string,
+      method: MethodType,
+      saveGlobal?: (object: T) => void,
+      body?: unknown,
+    ): Promise<T | undefined> => {
+      setLoading(true);
 
-    const returnObject: T | undefined = await ConnectionAPI.connect<T>(url, method, body)
-      .then((result) => {
-        if (saveGlobal) {
-          saveGlobal(result);
-        }
-        return result;
-      })
-      .catch((error: Error) => {
-        setNotification(error.message, 'error');
+      try {
+        return await ConnectionAPI.connect<T>(url, method, body).then((result) => {
+          if (saveGlobal) {
+            saveGlobal(result);
+          }
+          return result;
+        });
+      } catch (error) {
+        setNotification(
+          error instanceof Error ? error.message : ERROR_CONNECTION,
+          'error',
+        );
         return undefined;
-      });
+      } finally {
+        setLoading(false);
+      }
+    },
+    [setNotification],
+  );
 
-    setLoading(false);
+  const authRequest = useCallback(
+    async (body: unknown): Promise<boolean> => {
+      setLoading(true);
 
-    return returnObject;
-  };
-
-  const authRequest = async (body: unknown): Promise<void> => {
-    const navigate = useNavigate();
-    setLoading(true);
-
-    await connectionAPIPost<AuthType>(URL_AUTH, body)
-      .then((result) => {
+      try {
+        const result = await connectionAPIPost<AuthType>(URL_AUTH, body);
         setUser(result.user);
         setAuthorizationToken(result.accessToken);
-        navigate(ProductRoutesEnum.PRODUCT);
-        return result;
-      })
-      .catch(() => {
+        return true;
+      } catch {
         setNotification(ERROR_INVALID_PASSWORD, 'error');
-        return undefined;
-      });
-
-    setLoading(false);
-  };
+        return false;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [setNotification, setUser],
+  );
 
   return {
     loading,

@@ -10,12 +10,12 @@ export const useNotification = () => {
   useEffect(() => {
     if (notification?.message && notification.type) {
       api[notification.type]({
-        message: `${notification.message}`,
+        title: notification.message,
         description: notification.description,
         placement: 'bottomRight',
       });
     }
-  }, [notification]);
+  }, [api, notification]);
 
   return {
     api,
