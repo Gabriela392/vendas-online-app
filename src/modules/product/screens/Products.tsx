@@ -6,20 +6,29 @@ import { URL_PRODUCT } from '../../../shared/constants/urls';
 import { MethodsEnum } from '../../../shared/enums/methods.enum';
 import { useDataContext } from '../../../shared/hooks/useDataContext';
 import { useRequests } from '../../../shared/hooks/useRequests';
-import type { ProductType } from '../types/ProductType';
+import type { ProductType } from '../../../shared/types/ProductType';
+import { bakeryProductsMock } from '../mocks/products.mock';
+import CategoryColumm from '../components/CategoryColumm';
+import TooltipImage from '../components/TooltipImage';
 
 const columns: ColumnsType<ProductType> = [
   {
     title: 'Id',
     dataIndex: 'id',
     key: 'id',
-    render: (text) => <a>{text}</a>,
+    render: (_, product) => <TooltipImage product={product} />,
   },
   {
     title: 'Nome',
     dataIndex: 'name',
     key: 'name',
     render: (text) => <a>{text}</a>,
+  },
+  {
+    title: 'Categoria',
+    dataIndex: ['category', 'name'],
+    key: 'category',
+    render: (_, product) => <CategoryColumm category={product.category} />,
   },
   {
     title: 'Preço',
@@ -34,10 +43,8 @@ const Product = () => {
   const { request } = useRequests();
 
   useEffect(() => {
-    request<ProductType[]>(URL_PRODUCT, MethodsEnum.GET, (apiProducts) => {
-      if (apiProducts.length > 0) {
-        setProducts(apiProducts);
-      }
+    request<ProductType[]>(URL_PRODUCT, MethodsEnum.GET, (response) => {
+      setProducts(response.length > 0 ? response : bakeryProductsMock);
     });
   }, []);
 

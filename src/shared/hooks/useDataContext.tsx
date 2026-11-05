@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react';
-import type { ProductType } from '../../modules/product/types/ProductType';
+import type { ProductType } from '../types/ProductType';
 import { bakeryProductsMock } from '../../modules/product/mocks/products.mock';
 
 interface DataContext {
