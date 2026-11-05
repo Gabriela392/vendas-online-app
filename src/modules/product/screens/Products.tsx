@@ -7,9 +7,14 @@ import { MethodsEnum } from '../../../shared/enums/methods.enum';
 import { useDataContext } from '../../../shared/hooks/useDataContext';
 import { useRequests } from '../../../shared/hooks/useRequests';
 import type { ProductType } from '../../../shared/types/ProductType';
+import Screen from '../../../shared/components/screen/Screen';
 import { bakeryProductsMock } from '../mocks/products.mock';
 import CategoryColumm from '../components/CategoryColumm';
 import TooltipImage from '../components/TooltipImage';
+import { convertNumberToMoney } from '../../../shared/functions/connection/money';
+import Button from '../../../shared/components/buttons/button/button';
+import { useNavigate } from 'react-router-dom';
+import { ProductRoutesEnum } from '../routes';
 
 const columns: ColumnsType<ProductType> = [
   {
@@ -34,13 +39,14 @@ const columns: ColumnsType<ProductType> = [
     title: 'Preço',
     dataIndex: 'price',
     key: 'price',
-    render: (text) => <a>{text}</a>,
+    render: (_, product) => <a>{convertNumberToMoney(product.price ?? 0)}</a>,
   },
 ];
 
 const Product = () => {
   const { products, setProducts } = useDataContext();
   const { request } = useRequests();
+  const navigate = useNavigate();
 
   useEffect(() => {
     request<ProductType[]>(URL_PRODUCT, MethodsEnum.GET, (response) => {
@@ -48,7 +54,25 @@ const Product = () => {
     });
   }, []);
 
-  return <Table columns={columns} dataSource={products} rowKey="id" />;
-};
+  const handleInsertProduct = () => {
+    navigate(ProductRoutesEnum.PRODUCT_INSERT);
+  };
+
+  return (
+    <Screen
+      listBreadcrumb={[
+        {
+          name: 'HOME',
+        },
+        {
+          name: 'PRODUTOS',
+        },
+      ]}
+    >
+      <Button onClick={handleInsertProduct}>Inserir produto</Button>
+      <Table columns={columns} dataSource={products} />
+    </Screen>
+  );
+}
 
 export default Product;
