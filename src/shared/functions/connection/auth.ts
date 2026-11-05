@@ -1,5 +1,4 @@
-import { type UserType } from '../../../modules/login/types/UserType';
-import { redirect } from 'react-router-dom';
+import type { UserType } from '../../../modules/login/types/UserType';
 import { AUTHORIZATION_KEY } from '../../constants/authorizationConstants';
 import { URL_USER } from '../../constants/urls';
 import { connectionAPIGet } from './connectionAPI';
@@ -18,15 +17,11 @@ export const getAuthorizationToken = () => getItemStorage(AUTHORIZATION_KEY);
 export const verifyLoggedIn = async () => {
   const token = getAuthorizationToken();
   if (!token) {
-    return redirect('/login');
+    location.href = '/login';
   }
-
-  try {
-    await connectionAPIGet<UserType>(URL_USER);
-  } catch {
+  await connectionAPIGet<UserType>(URL_USER).catch(() => {
     unsetAuthorizationToken();
-    return redirect('/login');
-  }
-
+    location.href = '/login';
+  });
   return null;
 };

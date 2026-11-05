@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { LogoImage } from '../styles/loginScreen.styles';
 import Button from '../../../shared/components/buttons/button/button';
 import Input from '../../../shared/components/inputs/input';
-import { ProductRoutesEnum } from '../../products/routes';
+import { ProductRoutesEnum } from '../../product/routes';
 import { useRequests } from '../../../shared/hooks/useRequests';
 import {
   BackgroundImage,

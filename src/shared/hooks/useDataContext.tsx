@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from 'react';
-import type { ProductType } from '../../modules/products/types/ProductType';
-import { bakeryProductsMock } from '../../modules/products/mocks/products.mock';
+import type { ProductType } from '../../modules/product/types/ProductType';
+import { bakeryProductsMock } from '../../modules/product/mocks/products.mock';
 
 interface DataContext {
   products?: ProductType[];

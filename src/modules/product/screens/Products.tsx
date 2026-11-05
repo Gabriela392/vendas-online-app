@@ -1,12 +1,11 @@
-
+import type { ColumnsType } from 'antd/es/table';
 import { useEffect } from 'react';
 
+import Table from '../../../shared/components/table/Table';
 import { URL_PRODUCT } from '../../../shared/constants/urls';
 import { MethodsEnum } from '../../../shared/enums/methods.enum';
 import { useDataContext } from '../../../shared/hooks/useDataContext';
 import { useRequests } from '../../../shared/hooks/useRequests';
-import { Table } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
 import type { ProductType } from '../types/ProductType';
 
 const columns: ColumnsType<ProductType> = [
@@ -35,10 +34,14 @@ const Product = () => {
   const { request } = useRequests();
 
   useEffect(() => {
-    request<ProductType[]>(URL_PRODUCT, MethodsEnum.GET, setProducts);
+    request<ProductType[]>(URL_PRODUCT, MethodsEnum.GET, (apiProducts) => {
+      if (apiProducts.length > 0) {
+        setProducts(apiProducts);
+      }
+    });
   }, []);
 
-  return <Table columns={columns} dataSource={products} />;
+  return <Table columns={columns} dataSource={products} rowKey="id" />;
 };
 
 export default Product;
