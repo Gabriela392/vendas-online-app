@@ -1,21 +1,17 @@
-import { ExternalContainer, TooltipContainer } from "./tooltip.style";
+import { Tooltip as TooltipAntd } from 'antd';
 
 interface TooltipProps {
   children: React.ReactNode;
-  tooltip: string;
+  tooltip?: React.ReactNode;
+  title?: string;
 }
 
-const Tooltip = ({ children, tooltip }: TooltipProps) => {
- 
-    return (
-        <TooltipContainer>
-            <ExternalContainer>
-                {tooltip}
-            </ExternalContainer>
-            {children}
-        </TooltipContainer>
-    )
-     
+const Tooltip = ({ children, tooltip, title }: TooltipProps) => {
+  return (
+    <TooltipAntd title={tooltip ?? title} placement="top">
+      {children}
+    </TooltipAntd>
+  );
 };
 
 export default Tooltip;
