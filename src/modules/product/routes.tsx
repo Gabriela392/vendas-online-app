@@ -1,13 +1,7 @@
 import type { RouteObject } from "react-router-dom";
 import Product from "./screens/Products";
 import ProductInsert from "./screens/ProductInsert";
-
-export const ProductRoutesEnum = {
-  PRODUCT: '/product',
-  PRODUCT_INSERT: '/product/insert',
-} as const;
-
-export type ProductRoutesEnum = (typeof ProductRoutesEnum)[keyof typeof ProductRoutesEnum];
+import { ProductRoutesEnum } from "./productRoutes";
 
 export const productScreens: RouteObject[] = [
   {

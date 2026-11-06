@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { LogoImage } from '../styles/loginScreen.styles';
-import Button from '../../../shared/components/buttons/button/button';
+import Button from '../../../shared/components/buttons/button/Button';
 import Input from '../../../shared/components/inputs/input';
-import { ProductRoutesEnum } from '../../product/routes';
+import { ProductRoutesEnum } from '../../product/productRoutes';
 import { useRequests } from '../../../shared/hooks/useRequests';
 import {
   BackgroundImage,

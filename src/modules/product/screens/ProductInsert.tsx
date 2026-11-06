@@ -1,21 +1,23 @@
 import Screen from '../../../shared/components/screen/Screen';
-import { ProductRoutesEnum } from '../routes';
+import { ProductRoutesEnum } from '../productRoutes';
+
+const listBreadcrumb = [
+  {
+    name: 'HOME',
+  },
+  {
+    name: 'PRODUTOS',
+    navigateTo: ProductRoutesEnum.PRODUCT,
+  },
+  {
+    name: 'INSERIR PRODUTO',
+  },
+];
 
 const ProductInsert = () => {
   return (
     <Screen
-      listBreadcrumb={[
-        {
-          name: 'HOME',
-        },
-        {
-          name: 'PRODUTOS',
-          navigateTo: ProductRoutesEnum.PRODUCT,
-        },
-        {
-          name: 'INSERIR PRODUTO',
-        },
-      ]}
+      listBreadcrumb={listBreadcrumb}
     >
       Inserir produto
     </Screen>
