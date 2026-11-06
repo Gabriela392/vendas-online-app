@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { LogoImage } from '../styles/loginScreen.styles';
 import Button from '../../../shared/components/buttons/button/Button';
-import Input from '../../../shared/components/inputs/Input';
+import Input from '../../../shared/components/inputs/input';
 import { ProductRoutesEnum } from '../../product/productRoutes';
 import { useRequests } from '../../../shared/hooks/useRequests';
 import {
