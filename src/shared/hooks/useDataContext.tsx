@@ -1,9 +1,11 @@
 import { createContext, useContext, useState } from 'react';
 import type { ProductType } from '../types/ProductType';
+import type { CategoryType } from '../types/CategoryType';
 import { bakeryProductsMock } from '../../modules/product/mocks/products.mock';
 
 interface DataContext {
   products?: ProductType[];
+  categories?: CategoryType[];
 }
 
 interface DataContextProps {
@@ -35,8 +37,17 @@ export const useDataContext = () => {
     });
   };
 
+  const setCategories = (categories: CategoryType[]) => {
+    setData({
+      ...data,
+      categories,
+    });
+  };
+
   return {
     products: data?.products || [],
+    categories: data?.categories || [],
     setProducts,
+    setCategories,
   };
 };
