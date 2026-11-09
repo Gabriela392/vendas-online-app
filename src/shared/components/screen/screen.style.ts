@@ -1,9 +1,7 @@
 import styled from "styled-components";
 
 export const ScreenContainer = styled.div`
-background-color: white;
-padding: 32px;
-margin: 32px;
-width: calc()(100% - 368px);
-margin-left: auto;
+box-sizing: border-box;
+width: calc(100% - 368px);
+margin: 32px 32px 32px auto;
 `;
