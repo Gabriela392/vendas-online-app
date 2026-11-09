@@ -1,18 +1,20 @@
-import { Input as InputAntd, type InputProps as InputPropsAntd } from 'antd';
+import { Input as AntdInput, type InputProps as AntdInputProps } from 'antd';
 
-import { BoxInput, TitleInput } from './input.styles';
+export type InputProps = AntdInputProps;
 
-interface InputProps extends InputPropsAntd {
-  title?: string;
+interface BaseInputProps extends InputProps {
+  value?: string | number;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   margin?: string;
+  title?: string;
 }
- 
-const Input = ({ title, margin, ...props }: InputProps) => {
+
+const Input = ({ value, onChange, margin, title, ...props }: BaseInputProps) => {
   return (
-    <BoxInput style={{margin}}>
-      {title && <TitleInput>{title}</TitleInput>}
-      <InputAntd {...props} />
-    </BoxInput>
+    <div style={{ width: '100%', margin }}>
+      {title && <div style={{ marginBottom: 8 }}>{title}</div>}
+      <AntdInput value={value} onChange={onChange} {...props} />
+    </div>
   );
 };
 

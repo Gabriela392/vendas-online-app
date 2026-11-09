@@ -1,14 +1,17 @@
 import { createContext, useContext, useState } from 'react';
-import type { ProductType } from '../types/ProductType';
+
 import { bakeryProductsMock } from '../../modules/product/mocks/products.mock';
+import type { CategoryType } from '../types/CategoryType';
+import type { ProductType } from '../types/ProductType';
 
 interface DataContext {
-  products?: ProductType[];
+  products: ProductType[];
+  categories: CategoryType[];
 }
 
 interface DataContextProps {
   data: DataContext;
-  setData: (data: DataContext) => void;
+  setData: React.Dispatch<React.SetStateAction<DataContext>>;
 }
 
 const DataContext = createContext({} as DataContextProps);
@@ -20,6 +23,7 @@ interface DataProviderProps {
 export const DataProvider = ({ children }: DataProviderProps) => {
   const [data, setData] = useState<DataContext>({
     products: bakeryProductsMock,
+    categories: [],
   });
 
   return <DataContext.Provider value={{ data, setData }}>{children}</DataContext.Provider>;
@@ -29,14 +33,23 @@ export const useDataContext = () => {
   const { data, setData } = useContext(DataContext);
 
   const setProducts = (products: ProductType[]) => {
-    setData({
-      ...data,
+    setData((currentData) => ({
+      ...currentData,
       products,
-    });
+    }));
+  };
+
+  const setCategories = (categories: CategoryType[]) => {
+    setData((currentData) => ({
+      ...currentData,
+      categories,
+    }));
   };
 
   return {
     products: data?.products || [],
+    categories: data?.categories || [],
     setProducts,
+    setCategories,
   };
 };
