@@ -11,11 +11,12 @@ import { useDataContext } from '../../../shared/hooks/useDataContext';
 import { useRequests } from '../../../shared/hooks/useRequests';
 import type { ProductType } from '../../../shared/types/ProductType';
 import TooltipImage from '../components/TooltipImage';
-import { BoxButtons, LimiteSizeButton, LimiteSizeInput } from '../styles/product.style';
 import type { ColumnsType } from 'antd/es/table';
 import { convertNumberToMoney } from '../../../shared/functions/connection/money';
 import CategoryColumn from '../components/CategoryColumm';
 import { ProductRoutesEnum } from '../productRoutes';
+import { DisplayFlexJustifyBetween } from '../../../shared/components/styles/display.style';
+import { LimitedContainer } from '../../../shared/components/styles/limited.styled';
 
 const { Search } = Input;
 
@@ -49,33 +50,24 @@ const columns: ColumnsType<ProductType> = [
 
 const Product = () => {
   const { products, setProducts } = useDataContext();
-  const [productsFiltered, setProdutsFiltered] = useState<ProductType[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const { request } = useRequests();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setProdutsFiltered([...products]);
-  }, [products]);
+  const normalizedSearchTerm = searchTerm.trim().toLocaleLowerCase();
+  const productsFiltered = products.filter((product) =>
+    product.name.toLocaleLowerCase().includes(normalizedSearchTerm),
+  );
 
   useEffect(() => {
     request<ProductType[]>(URL_PRODUCT, MethodsEnum.GET, setProducts);
-  }, []);
+  }, [request, setProducts]);
 
   const handleOnClickInsert = () => {
     navigate(ProductRoutesEnum.PRODUCT_INSERT);
   };
 
   const onSearch = (value: string) => {
-    const term = value.trim().toLocaleLowerCase();
-
-    if (!term) {
-      setProdutsFiltered([...products]);
-      return;
-    }
-
-    setProdutsFiltered(
-      products.filter((product) => product.name.toLocaleLowerCase().includes(term)),
-    );
+    setSearchTerm(value);
   };
 
   return (
@@ -89,20 +81,20 @@ const Product = () => {
         },
       ]}
     >
-      <BoxButtons>
-        <LimiteSizeInput>
+      <DisplayFlexJustifyBetween margin="0px 0px 16px 0px">
+        <LimitedContainer width={240}>
           <Search
             placeholder="Buscar produto"
             onChange={(event) => onSearch(event.target.value)}
           />
-        </LimiteSizeInput>
+        </LimitedContainer>
 
-        <LimiteSizeButton>
+        <LimitedContainer width={120}>
           <Button type="primary" onClick={handleOnClickInsert}>
             Inserir
           </Button>
-        </LimiteSizeButton>
-      </BoxButtons>
+        </LimitedContainer>
+      </DisplayFlexJustifyBetween>
       <Table columns={columns} dataSource={productsFiltered} />
     </Screen>
   );

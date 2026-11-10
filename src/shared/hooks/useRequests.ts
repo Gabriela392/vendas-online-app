@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import type { AuthType } from '../../modules/login/types/AuthType';
 import { URL_AUTH } from '../constants/urls';
@@ -14,30 +14,37 @@ export const useRequests = () => {
   const [loading, setLoading] = useState(false);
   const { setNotification, setUser } = useGlobalContext();
 
-  const request = async <T>(
-    url: string,
-    method: MethodType,
-    saveGlobal?: (object: T) => void,
-    body?: unknown,
-  ): Promise<T | undefined> => {
-    setLoading(true);
+  const request = useCallback(
+    async <T>(
+      url: string,
+      method: MethodType,
+      saveGlobal?: (object: T) => void,
+      body?: unknown,
+    ): Promise<T | undefined> => {
+      setLoading(true);
 
-    const returnObject: T | undefined = await ConnectionAPI.connect<T>(url, method, body)
-      .then((result) => {
-        if (saveGlobal) {
-          saveGlobal(result);
-        }
-        return result;
-      })
-      .catch((error: Error) => {
-        setNotification(error.message, 'error');
-        return undefined;
-      });
+      const returnObject: T | undefined = await ConnectionAPI.connect<T>(
+        url,
+        method,
+        body,
+      )
+        .then((result) => {
+          if (saveGlobal) {
+            saveGlobal(result);
+          }
+          return result;
+        })
+        .catch((error: Error) => {
+          setNotification(error.message, 'error');
+          return undefined;
+        });
 
-    setLoading(false);
+      setLoading(false);
 
-    return returnObject;
-  };
+      return returnObject;
+    },
+    [setNotification],
+  );
 
   const authRequest = async (body: unknown): Promise<boolean> => {
     setLoading(true);
@@ -46,7 +53,7 @@ export const useRequests = () => {
       const result = await connectionAPIPost<AuthType>(URL_AUTH, body);
       setUser(result.user);
       setAuthorizationToken(result.accessToken);
-      
+
       return true;
     } catch {
       setNotification(ERROR_INVALID_PASSWORD, 'error');
