@@ -7,7 +7,6 @@ import InputMoney from '../../../shared/components/inputs/inputMoney/InputMoney'
 import Screen from '../../../shared/components/screen/Screen';
 import { DisplayFlexJustifyRight } from '../../../shared/components/styles/display.style';
 import { ProductRoutesEnum } from '../productRoutes';
-import { ProductInsertContainer } from '../styles/productInsert.style';
 import { useInsertProduct } from '../hooks/useInsertProduct';
 import { useCategory } from '../../category/hooks/useCategory';
 import { LimitedContainer } from '../../../shared/components/styles/limited.styled';
@@ -43,7 +42,7 @@ const ProductInsert = () => {
         },
       ]}
     >
-      <ProductInsertContainer>
+      <DisplayFlexJustifyRight>
         <LimitedContainer width={400}>
           <Input
             onChange={(event) => onChangeInput(event, 'name')}
@@ -95,7 +94,7 @@ const ProductInsert = () => {
             </LimitedContainer>
           </DisplayFlexJustifyRight>
         </LimitedContainer>
-      </ProductInsertContainer>
+      </DisplayFlexJustifyRight>
     </Screen>
   );
 };

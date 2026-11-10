@@ -9,7 +9,12 @@ export const DisplayFlex = styled.div`
 `;
 
 export const DisplayFlexJustifyRight = styled.div`
+  display: flex;
   justify-content: flex-end;
+`;
+
+export const DisplayFlexJustifyCenter = styled(DisplayFlex)`
+  justify-content: center;
 `;
 
 export const DisplayFlexJustifyBetween = styled(DisplayFlex)<DisplayFlexProps>`
