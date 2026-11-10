@@ -1,5 +1,4 @@
 import { Select as AntdSelect } from 'antd';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '../../../shared/components/buttons/button/Button';
@@ -7,18 +6,14 @@ import Input from '../../../shared/components/inputs/input';
 import InputMoney from '../../../shared/components/inputs/inputMoney/InputMoney';
 import Screen from '../../../shared/components/screen/Screen';
 import { DisplayFlexJustifyRight } from '../../../shared/components/styles/display.style';
-import { LimitedContainer } from '../../../shared/components/styles/limited.styled';
-import { MethodsEnum } from '../../../shared/enums/methods.enum';
-import { useDataContext } from '../../../shared/hooks/useDataContext';
-import { useRequests } from '../../../shared/hooks/useRequests';
 import { ProductRoutesEnum } from '../productRoutes';
 import { ProductInsertContainer } from '../styles/productInsert.style';
-import { URL_CATEGORY } from '../../../shared/constants/urls';
 import { useInsertProduct } from '../hooks/useInsertProduct';
-
+import { useCategory } from '../../category/hooks/useCategory';
+import { LimitedContainer } from '../../../shared/components/styles/limited.styled';
 
 const ProductInsert = () => {
-    const {
+  const {
     product,
     loading,
     disabledButton,
@@ -26,15 +21,8 @@ const ProductInsert = () => {
     handleInsertProduct,
     handleChangeSelect,
   } = useInsertProduct();
-  const { categories, setCategories } = useDataContext();
-  const { request } = useRequests();
+  const { categories } = useCategory();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (categories.length === 0) {
-      request(URL_CATEGORY, MethodsEnum.GET, setCategories);
-    }
-  }, [categories.length, request, setCategories]);
 
   const handleOnClickCancel = () => {
     navigate(ProductRoutesEnum.PRODUCT);
