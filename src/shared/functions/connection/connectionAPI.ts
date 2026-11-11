@@ -36,8 +36,14 @@ export default class ConnectionAPI {
           case 401:
           case 403:
             throw new Error(ERROR_ACCESS_DANIED);
-          default:
+          default: {
+            const message = error.response.data?.message;
+            if (message) {
+              const text = Array.isArray(message) ? message.join(', ') : message;
+              throw new Error(text);
+            }
             throw new Error(ERROR_CONNECTION);
+          }
         }
       }
       throw new Error(ERROR_CONNECTION);

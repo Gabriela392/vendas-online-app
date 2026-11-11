@@ -12,7 +12,7 @@ import { LimitedContainer } from '../../../shared/components/styles/limited.styl
 import Input from '../../../shared/components/inputs/input';
 
 const CategoryInsert = () => {
-  const { name, loading, handleOnChange, insertCategory } = useInsertCategory();
+  const { name, loading, handleOnChange, disabledButton, insertCategory } = useInsertCategory();
   const navigate = useNavigate();
 
   const handleOnClickCancel = () => {
@@ -50,7 +50,12 @@ const CategoryInsert = () => {
               </Button>
             </LimitedContainer>
             <LimitedContainer width={160}>
-              <Button loading={loading} onClick={insertCategory} type="primary">
+              <Button
+                disabled={disabledButton}
+                loading={loading}
+                onClick={insertCategory}
+                type="primary"
+              >
                 Inserir categoria
               </Button>
             </LimitedContainer>
