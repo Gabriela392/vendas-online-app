@@ -1,22 +1,22 @@
 import { Input } from 'antd';
+import type { ColumnsType } from 'antd/es/table';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '../../../shared/components/buttons/button/Button';
 import Screen from '../../../shared/components/screen/Screen';
+import { DisplayFlexJustifyBetween } from '../../../shared/components/styles/display.style';
+import { LimitedContainer } from '../../../shared/components/styles/limited.styled';
 import Table from '../../../shared/components/table/Table';
 import { URL_PRODUCT } from '../../../shared/constants/urls';
 import { MethodsEnum } from '../../../shared/enums/methods.enum';
-import { useDataContext } from '../../../shared/hooks/useDataContext';
+import { convertNumberToMoney } from '../../../shared/functions/connection/money';
 import { useRequests } from '../../../shared/hooks/useRequests';
 import type { ProductType } from '../../../shared/types/ProductType';
-import TooltipImage from '../components/TooltipImage';
-import type { ColumnsType } from 'antd/es/table';
-import { convertNumberToMoney } from '../../../shared/functions/connection/money';
 import CategoryColumn from '../components/CategoryColumm';
+import TooltipImage from '../components/TooltipImage';
 import { ProductRoutesEnum } from '../productRoutes';
-import { DisplayFlexJustifyBetween } from '../../../shared/components/styles/display.style';
-import { LimitedContainer } from '../../../shared/components/styles/limited.styled';
+import { useProductReducer } from '../../../store/reducers/productReducer/useProductReducer';
 
 const { Search } = Input;
 
@@ -49,7 +49,7 @@ const columns: ColumnsType<ProductType> = [
 ];
 
 const Product = () => {
-  const { products, setProducts } = useDataContext();
+  const { products, setProducts } = useProductReducer();
   const [searchTerm, setSearchTerm] = useState('');
   const { request } = useRequests();
   const navigate = useNavigate();
