@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import Tooltip from '../../../shared/components/tooltip/Tooltip';
 import type { ProductType } from '../../../shared/types/ProductType';
 import { ImageProduct } from '../styles/tooltipImage.style';
@@ -7,13 +9,20 @@ interface TooltipImageProps {
 }
 
 const TooltipImage = ({ product }: TooltipImageProps) => {
+  useEffect(() => {
+    if (product.image) {
+      const image = new Image();
+      image.src = product.image;
+    }
+  }, [product.image]);
+
   return (
     <Tooltip
       tooltip={
         product.image ? (
           <ImageProduct src={product.image} alt={product.name} />
         ) : (
-          product.description ?? 'Imagem indisponível'
+          (product.description ?? 'Imagem indisponível')
         )
       }
     >
