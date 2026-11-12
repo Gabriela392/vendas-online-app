@@ -1,3 +1,4 @@
+import { useGlobalReducer } from './../../store/reducers/globalReducer/useGlobalReducer';
 import { useCallback, useState } from 'react';
 
 import type { AuthType } from '../../modules/login/types/AuthType';
@@ -7,12 +8,11 @@ import ConnectionAPI, {
   connectionAPIPost,
   type MethodType,
 } from '../functions/connection/connectionAPI';
-import { useGlobalContext } from './useGlobalContext';
 import { ERROR_INVALID_PASSWORD } from '../constants/errorsStatus';
 
 export const useRequests = () => {
   const [loading, setLoading] = useState(false);
-  const { setNotification, setUser } = useGlobalContext();
+  const { setNotification, setUser } = useGlobalReducer();
 
   const request = useCallback(
     async <T>(

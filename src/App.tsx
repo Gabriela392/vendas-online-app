@@ -6,7 +6,6 @@ import { categoryScreens } from './modules/category/routes';
 import { URL_USER } from './shared/constants/urls';
 import { MethodsEnum } from './shared/enums/methods.enum';
 import { verifyLoggedIn } from './shared/functions/connection/auth';
-import { useGlobalContext } from './shared/hooks/useGlobalContext';
 import { useNotification } from './shared/hooks/useNotification';
 import { useRequests } from './shared/hooks/useRequests';
 import {
@@ -15,6 +14,7 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 import { productScreens } from './modules/product/routes';
+import { useGlobalReducer } from './store/reducers/globalReducer/useGlobalReducer';
 
 const routes: RouteObject[] = [...loginRoutes];
 const routesLoggedIn: RouteObject[] = [
@@ -31,7 +31,7 @@ const router = createBrowserRouter([...routes, ...routesLoggedIn]);
 
 function App() {
   const { contextHolder } = useNotification();
-  const { setUser } = useGlobalContext();
+  const { setUser } = useGlobalReducer();
   const { request } = useRequests();
 
   useEffect(() => {

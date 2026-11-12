@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { URL_PRODUCT } from '../../../shared/constants/urls';
 import { connectionAPIPost } from '../../../shared/functions/connection/connectionAPI';
-import { useGlobalContext } from '../../../shared/hooks/useGlobalContext';
 import { ProductRoutesEnum } from '../productRoutes';
+import { useGlobalReducer } from '../../../store/reducers/globalReducer/useGlobalReducer';
 
 type InsertProduct = {
   name: string;
@@ -15,22 +15,19 @@ type InsertProduct = {
 
 export const useInsertProduct = () => {
   const navigate = useNavigate();
-  const { setNotification } = useGlobalContext();
+  const { setNotification } = useGlobalReducer();
   const [loading, setLoading] = useState(false);
-  const [disabledButton, setDisabledButton] = useState(true);
   const [product, setProduct] = useState<InsertProduct>({
     name: '',
     price: 0,
     image: '',
   });
-
-  useEffect(() => {
-    if (product.name && product.categoryId && product.image && product.price > 0) {
-      setDisabledButton(false);
-    } else {
-      setDisabledButton(true);
-    }
-  }, [product]);
+  const disabledButton = !(
+    product.name &&
+    product.categoryId &&
+    product.image &&
+    product.price > 0
+  );
 
   const onChangeInput = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -52,7 +49,10 @@ export const useInsertProduct = () => {
 
   const handleUploadFile = (file: File) => {
     if (file.size > 5 * 1024 * 1024) {
-      setNotification('Arquivo muito grande! Escolha uma imagem de até 5MB.', 'error');
+      setNotification(
+        'Arquivo muito grande! Escolha uma imagem de até 5MB.',
+        'error',
+      );
       return;
     }
 
