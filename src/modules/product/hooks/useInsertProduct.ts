@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { URL_PRODUCT } from '../../../shared/constants/urls';
 import { connectionAPIPost } from '../../../shared/functions/connection/connectionAPI';
 import { ProductRoutesEnum } from '../productRoutes';
-import { useGlobalReducer } from '../../../store/reducers/globalReducer/useGlobalReducer';
+import { useAppNotification } from '../../../store/reducers/globalReducer/useGlobalReducer';
 
 type InsertProduct = {
   name: string;
@@ -15,7 +15,7 @@ type InsertProduct = {
 
 export const useInsertProduct = () => {
   const navigate = useNavigate();
-  const { setNotification } = useGlobalReducer();
+  const { setNotification } = useAppNotification();
   const [loading, setLoading] = useState(false);
   const [product, setProduct] = useState<InsertProduct>({
     name: '',

@@ -33,7 +33,7 @@ const columns: ColumnsType<CategoryType> = [
 ];
 
 const Category = () => {
-   const { categories, handleOnChangeSearch } = useCategory();
+  const { categories, handleOnChangeSearch } = useCategory();
 
   const navigate = useNavigate();
 
@@ -54,7 +54,10 @@ const Category = () => {
     >
       <DisplayFlexJustifyBetween margin="0px 0px 16px 0px">
         <LimitedContainer width={240}>
-           <Search placeholder="Buscar categoria" onSearch={handleOnChangeSearch} enterButton />
+          <Search
+            placeholder="Buscar categoria"
+            onChange={(event) => handleOnChangeSearch(event.target.value)}
+          />
         </LimitedContainer>
 
         <LimitedContainer width={120}>

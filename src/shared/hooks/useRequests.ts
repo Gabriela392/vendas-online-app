@@ -1,4 +1,7 @@
-import { useGlobalReducer } from './../../store/reducers/globalReducer/useGlobalReducer';
+import {
+  useAppNotification,
+  useUser,
+} from './../../store/reducers/globalReducer/useGlobalReducer';
 import { useCallback, useState } from 'react';
 
 import type { AuthType } from '../../modules/login/types/AuthType';
@@ -12,7 +15,8 @@ import { ERROR_INVALID_PASSWORD } from '../constants/errorsStatus';
 
 export const useRequests = () => {
   const [loading, setLoading] = useState(false);
-  const { setNotification, setUser } = useGlobalReducer();
+  const { setNotification } = useAppNotification();
+  const { setUser } = useUser();
 
   const request = useCallback(
     async <T>(

@@ -14,7 +14,7 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 import { productScreens } from './modules/product/routes';
-import { useGlobalReducer } from './store/reducers/globalReducer/useGlobalReducer';
+import { useUser } from './store/reducers/globalReducer/useGlobalReducer';
 
 const routes: RouteObject[] = [...loginRoutes];
 const routesLoggedIn: RouteObject[] = [
@@ -31,7 +31,7 @@ const router = createBrowserRouter([...routes, ...routesLoggedIn]);
 
 function App() {
   const { contextHolder } = useNotification();
-  const { setUser } = useGlobalReducer();
+  const { setUser } = useUser();
   const { request } = useRequests();
 
   useEffect(() => {

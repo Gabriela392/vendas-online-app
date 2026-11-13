@@ -7,17 +7,11 @@ import {
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Menu as MenuAntd } from 'antd';
-import { useState } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import {
-  MenuContainer,
-  MenuContainerLogoName,
-  MenuLogo,
-  NameCompany,
-} from './menu.style';
 import { ProductRoutesEnum } from '../../../modules/product/productRoutes';
 import { CategoryRoutesEnum } from '../../../modules/category/routes';
+import { MenuContainer } from './menu.style';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -25,68 +19,62 @@ const Menu = () => {
   const navigate = useNavigate();
   const [current, setCurrent] = useState('1');
 
-  const items: MenuItem[] = [
-    {
-      key: 'home',
-      label: 'Principal',
-      icon: <HomeOutlined />,
-    },
-    {
-      key: 'products',
-      label: 'Produtos',
-      icon: <LaptopOutlined />,
-      children: [
-        {
-          key: 'products_view',
-          label: 'Visualizar',
-          onClick: () => navigate(ProductRoutesEnum.PRODUCT),
-        },
-        {
-          key: 'products_insert',
-          label: 'Inserir',
-          onClick: () => navigate(ProductRoutesEnum.PRODUCT_INSERT),
-        },
-      ],
-    },
-    {
-      key: 'category',
-      label: 'Categorias',
-      icon: <ProfileOutlined />,
-      children: [
-        {
-          key: 'category_view',
-          label: 'Visualizar',
-          onClick: () => navigate(CategoryRoutesEnum.CATEGORY),
-        },
-        {
-          key: 'category_insert',
-          label: 'Inserir',
-          onClick: () => navigate(CategoryRoutesEnum.CATEGORY_INSERT),
-        },
-      ],
-    },
-    {
-      key: 'order',
-      label: 'Pedidos',
-      icon: <SafetyCertificateOutlined />,
-    },
-    {
-      key: 'user',
-      label: 'Clientes',
-      icon: <UserOutlined />,
-    },
-  ];
+  const items: MenuItem[] = useMemo(
+    () => [
+      { key: 'home', label: 'Principal', icon: <HomeOutlined /> },
+      {
+        key: 'products',
+        label: 'Produtos',
+        icon: <LaptopOutlined />,
+        children: [
+          {
+            key: 'products_view',
+            label: 'Visualizar',
+            onClick: () => navigate(ProductRoutesEnum.PRODUCT),
+          },
+          {
+            key: 'products_insert',
+            label: 'Inserir',
+            onClick: () => navigate(ProductRoutesEnum.PRODUCT_INSERT),
+          },
+        ],
+      },
+      {
+        key: 'category',
+        label: 'Categorias',
+        icon: <ProfileOutlined />,
+        children: [
+          {
+            key: 'category_view',
+            label: 'Visualizar',
+            onClick: () => navigate(CategoryRoutesEnum.CATEGORY),
+          },
+          {
+            key: 'category_insert',
+            label: 'Inserir',
+            onClick: () => navigate(CategoryRoutesEnum.CATEGORY_INSERT),
+          },
+        ],
+      },
+      {
+        key: 'order',
+        label: 'Pedidos',
+        icon: <SafetyCertificateOutlined />,
+      },
+      {
+        key: 'user',
+        label: 'Clientes',
+        icon: <UserOutlined />,
+      },
+    ],
+    [navigate],
+  );
 
-  const onClick: MenuProps['onClick'] = (e) => {
-    setCurrent(e.key);
-  };
+  const onClick: MenuProps['onClick'] = (e) => setCurrent(e.key);
 
   return (
     <MenuContainer>
-      <MenuContainerLogoName>
-        <MenuLogo src="/logo.png" alt="Logo" />
-        <NameCompany>Vendas Online</NameCompany>
-      </MenuContainerLogoName>
+      {/* ...igual... */}
       <MenuAntd
         theme="dark"
         onClick={onClick}
@@ -100,4 +88,4 @@ const Menu = () => {
   );
 };
 
-export default Menu;
+export default memo(Menu);

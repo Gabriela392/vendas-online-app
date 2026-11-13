@@ -3,10 +3,10 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ProductRoutesEnum } from '../../product/productRoutes';
-import { useGlobalReducer } from '../../../store/reducers/globalReducer/useGlobalReducer';
+import { useUser } from '../../../store/reducers/globalReducer/useGlobalReducer';
 
 const FirstScreen = () => {
-  const { user } = useGlobalReducer();
+  const { user } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {

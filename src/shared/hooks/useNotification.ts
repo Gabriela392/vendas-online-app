@@ -1,11 +1,11 @@
 import { notification as notificationAntd } from 'antd';
 import { useEffect } from 'react';
 
-import { useGlobalReducer } from '../../store/reducers/globalReducer/useGlobalReducer';
+import { useAppNotification } from '../../store/reducers/globalReducer/useGlobalReducer';
 
 export const useNotification = () => {
   const [api, contextHolder] = notificationAntd.useNotification();
-  const { notification } = useGlobalReducer();
+  const { notification } = useAppNotification();
 
   useEffect(() => {
     if (notification?.message && notification.type) {

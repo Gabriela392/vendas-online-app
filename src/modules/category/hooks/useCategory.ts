@@ -26,8 +26,9 @@ export const useCategory = () => {
     }
   }, [categories, request, setCategories]);
 
+  const normalizedSearchTerm = searchTerm.trim().toLocaleLowerCase();
   const categoriesFiltered = currentCategories.filter((category) =>
-    category.name.toUpperCase().includes(searchTerm.toUpperCase()),
+    category.name.toLocaleLowerCase().includes(normalizedSearchTerm),
   );
 
   const handleOnChangeSearch = (value: string) => {
