@@ -66,6 +66,12 @@
   "pre-commit": "lint",
   "jest": {
     "testEnvironment": "jest-environment-jsdom",
+    "testMatch": [
+      "**/?(*.)+(spec|test).[jt]s?(x)"
+    ],
+    "transformIgnorePatterns": [
+      "/node_modules/(?!@ant-design/colors/)"
+    ],
     "setupFilesAfterEnv": [
       "<rootDir>/setup-tests.js"
     ],

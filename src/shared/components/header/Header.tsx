@@ -3,6 +3,7 @@ import { HeadContainer, IconExit } from './header.style';
 
 import { useState } from 'react';
 import { Modal } from 'antd';
+import { HeaderTestIdEnum } from './__tests__/headerTestIdEnum';
 
 const Header = () => {
   const [open, setOpen] = useState(false);
@@ -17,17 +18,23 @@ const Header = () => {
   return (
     <>
       <Modal
+        data-testid={HeaderTestIdEnum.HEADER_MODAL}
         title=""
         open={open}
         onOk={logout}
         onCancel={hideModal}
-        okText="Sair"
+        okText="Sim"
         cancelText="Cancelar"
       >
-        <p>Realmente deseja sair?</p>
+        <p data-testid={HeaderTestIdEnum.HEADER_MODAL_P}>
+          Realmente deseja sair?
+        </p>
       </Modal>
-      <HeadContainer>
-        <IconExit onClick={showModal} />
+      <HeadContainer data-testid={HeaderTestIdEnum.HEADER_CONTAINER}>
+        <IconExit
+          data-testid={HeaderTestIdEnum.HEADER_LOGO}
+          onClick={showModal}
+        />
       </HeadContainer>
     </>
   );
