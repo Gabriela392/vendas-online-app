@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { Select as AntdSelect, Radio, Upload, Image } from 'antd';
-import { UploadOutlined, LinkOutlined, DeleteOutlined } from '@ant-design/icons';
+import {
+  UploadOutlined,
+  LinkOutlined,
+  DeleteOutlined,
+} from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '../../../shared/components/buttons/button/Button';
@@ -12,6 +16,8 @@ import { ProductRoutesEnum } from '../productRoutes';
 import { useInsertProduct } from '../hooks/useInsertProduct';
 import { useCategory } from '../../category/hooks/useCategory';
 import { LimitedContainer } from '../../../shared/components/styles/limited.styled';
+import { ProductInsertTestIdEnum } from '../enum/ProductInsertTestIdEnum';
+import type { CategoryType } from '../../../shared/types/CategoryType';
 
 const ProductInsert = () => {
   const [imageType, setImageType] = useState<'url' | 'file'>('url');
@@ -47,9 +53,12 @@ const ProductInsert = () => {
         },
       ]}
     >
-      <DisplayFlexJustifyRight>
+      <DisplayFlexJustifyRight
+        data-testid={ProductInsertTestIdEnum.PRODUCT_INSERT_CONTAINER}
+      >
         <LimitedContainer width={400}>
           <Input
+            data-testid={ProductInsertTestIdEnum.PRODUCT_INPUT_NAME}
             onChange={(event) => onChangeInput(event, 'name')}
             value={product.name}
             margin="0px 0px 16px 0px"
@@ -58,7 +67,9 @@ const ProductInsert = () => {
           />
 
           <div style={{ marginBottom: 16 }}>
-            <div style={{ marginBottom: 8, fontWeight: 500 }}>Imagem do Produto</div>
+            <div style={{ marginBottom: 8, fontWeight: 500 }}>
+              Imagem do Produto
+            </div>
             <Radio.Group
               value={imageType}
               onChange={(e) => setImageType(e.target.value)}
@@ -74,6 +85,7 @@ const ProductInsert = () => {
 
             {imageType === 'url' ? (
               <Input
+                data-testid={ProductInsertTestIdEnum.PRODUCT_INPUT_IMAGE}
                 onChange={(event) => onChangeInput(event, 'image')}
                 value={product.image.startsWith('data:') ? '' : product.image}
                 margin="0px 0px 8px 0px"
@@ -90,7 +102,9 @@ const ProductInsert = () => {
                   }}
                 >
                   <Button icon={<UploadOutlined />}>
-                    {product.image.startsWith('data:') ? 'Trocar arquivo de foto' : 'Escolher foto do computador'}
+                    {product.image.startsWith('data:')
+                      ? 'Trocar arquivo de foto'
+                      : 'Escolher foto do computador'}
                   </Button>
                 </Upload>
               </div>
@@ -118,9 +132,13 @@ const ProductInsert = () => {
                     style={{ objectFit: 'cover', borderRadius: 4 }}
                   />
                   <div>
-                    <div style={{ fontSize: 13, fontWeight: 500 }}>Pré-visualização</div>
+                    <div style={{ fontSize: 13, fontWeight: 500 }}>
+                      Pré-visualização
+                    </div>
                     <div style={{ fontSize: 11, color: '#888' }}>
-                      {product.image.startsWith('data:') ? 'Foto carregada do arquivo' : 'Imagem via URL'}
+                      {product.image.startsWith('data:')
+                        ? 'Foto carregada do arquivo'
+                        : 'Imagem via URL'}
                     </div>
                   </div>
                 </div>
@@ -137,6 +155,7 @@ const ProductInsert = () => {
           </div>
 
           <InputMoney
+            data-testid={ProductInsertTestIdEnum.PRODUCT_INPUT_PRICE}
             onChange={(event) => onChangeInput(event, 'price', true)}
             value={product.price}
             margin="0px 0px 16px 0px"
@@ -146,9 +165,10 @@ const ProductInsert = () => {
           <div style={{ marginBottom: 32 }}>
             <div style={{ marginBottom: 8 }}>Categoria</div>
             <AntdSelect
+              data-testid={ProductInsertTestIdEnum.PRODUCT_INPUT_SELECT}
               style={{ width: '100%' }}
               onChange={(value) => handleChangeSelect(String(value))}
-              options={categories.map((category) => ({
+              options={categories.map((category: CategoryType) => ({
                 value: `${category.id}`,
                 label: category.name,
               }))}
@@ -156,12 +176,17 @@ const ProductInsert = () => {
           </div>
           <DisplayFlexJustifyRight>
             <LimitedContainer margin="0px 8px" width={120}>
-              <Button danger onClick={handleOnClickCancel}>
+              <Button
+                data-testid={ProductInsertTestIdEnum.PRODUCT_BUTTON_CANCEL}
+                danger
+                onClick={handleOnClickCancel}
+              >
                 Cancelar
               </Button>
             </LimitedContainer>
             <LimitedContainer width={120}>
               <Button
+                data-testid={ProductInsertTestIdEnum.PRODUCT_BUTTON_INSERT}
                 loading={loading}
                 disabled={disabledButton}
                 onClick={handleInsertProduct}

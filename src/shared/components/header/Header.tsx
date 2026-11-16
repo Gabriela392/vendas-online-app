@@ -3,7 +3,7 @@ import { HeadContainer, IconExit } from './header.style';
 
 import { useState } from 'react';
 import { Modal } from 'antd';
-import { HeaderTestIdEnum } from './__tests__/headerTestIdEnum';
+import { HeaderTestIdEnum } from '../../enums/headerTestIdEnum';
 
 const Header = () => {
   const [open, setOpen] = useState(false);
