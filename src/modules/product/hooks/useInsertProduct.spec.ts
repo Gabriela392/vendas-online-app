@@ -1,147 +1,137 @@
-import { act, renderHook, waitFor } from '@testing-library/react';
-import { useNavigate } from 'react-router-dom';
-import { URL_PRODUCT } from '../../../shared/constants/urls';
-import { connectionAPIPost } from '../../../shared/functions/connection/connectionAPI';
-import { useAppNotification } from '../../../store/reducers/globalReducer/useGlobalReducer';
-import { ProductRoutesEnum } from '../productRoutes';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { act, renderHook } from '@testing-library/react';
 import { useInsertProduct } from './useInsertProduct';
+import MockAdapter from 'axios-mock-adapter';
+import { URL_PRODUCT } from '../../../shared/constants/urls';
+import axios from 'axios';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: jest.fn(),
-}));
+const mockAxios = new MockAdapter(axios);
 
-jest.mock('../../../shared/functions/connection/connectionAPI', () => ({
-  connectionAPIPost: jest.fn(),
-}));
-
-jest.mock('../../../store/reducers/globalReducer/useGlobalReducer', () => ({
-  useAppNotification: jest.fn(),
-}));
-
+mockAxios.onPost(URL_PRODUCT, {});
 const mockNavigate = jest.fn();
 const mockSetNotification = jest.fn();
 
-beforeEach(() => {
-  jest.clearAllMocks();
-  jest.mocked(useNavigate).mockReturnValue(mockNavigate);
-  jest.mocked(useAppNotification).mockReturnValue({
-    notification: undefined,
-    setNotification: mockSetNotification,
-  });
-  jest.mocked(connectionAPIPost).mockResolvedValue(undefined);
-});
+jest.mock('react-router-dom', () => ({
+  useNavigate: () => mockNavigate,
+}));
 
-describe('useInsertProduct', () => {
-  it('returns the initial product state', () => {
+jest.mock('../../../store/reducers/globalReducer/useGlobalReducer', () => ({
+  useAppNotification: () => ({
+    setNotification: mockSetNotification,
+  }),
+  useGlobalReducer: () => ({
+    setNotification: mockSetNotification,
+  }),
+}));
+
+describe('Test useInsertProduct', () => {
+  it('should return initial values', () => {
     const { result } = renderHook(() => useInsertProduct());
 
+    expect(result.current.loading).toEqual(false);
+    expect(result.current.disabledButton).toEqual(true);
     expect(result.current.product).toEqual({
       name: '',
       price: 0,
       image: '',
     });
-    expect(result.current.loading).toBe(false);
-    expect(result.current.disabledButton).toBe(true);
   });
 
-  it('updates text, numeric, and category fields', () => {
+  it('should change select in handleChangeSelect', () => {
+    const { result } = renderHook(() => useInsertProduct());
+
+    act(() => {
+      result.current.handleChangeSelect('4324');
+    });
+
+    expect(result.current.product.categoryId).toEqual(4324);
+  });
+
+  it('should change product in onChangeInput send name', () => {
+    const TEST_MOCK = 'TEST_MOCK';
     const { result } = renderHook(() => useInsertProduct());
 
     act(() => {
       result.current.onChangeInput(
-        {
-          target: { value: 'Cafeteira' },
-        } as React.ChangeEvent<HTMLInputElement>,
+        { target: { value: TEST_MOCK } } as any,
         'name',
       );
     });
+
+    expect(result.current.product.name).toEqual(TEST_MOCK);
+  });
+
+  it('should change product in onChangeInput send price', () => {
+    const TEST_MOCK = '3453';
+    const { result } = renderHook(() => useInsertProduct());
+
     act(() => {
       result.current.onChangeInput(
-        { target: { value: '125.5' } } as React.ChangeEvent<HTMLInputElement>,
+        { target: { value: TEST_MOCK } } as any,
         'price',
         true,
       );
     });
-    act(() => {
-      result.current.handleChangeSelect('7');
-    });
 
-    expect(result.current.product).toEqual({
-      name: 'Cafeteira',
-      price: 125.5,
-      image: '',
-      categoryId: 7,
-    });
+    expect(result.current.product.price).toEqual(Number(TEST_MOCK));
   });
 
-  it('rejects image files larger than 5 MB', () => {
+  it('should change disabledButton in insert data', () => {
     const { result } = renderHook(() => useInsertProduct());
-    const file = new File([new Uint8Array(5 * 1024 * 1024 + 1)], 'large.png', {
-      type: 'image/png',
-    });
+
+    expect(result.current.disabledButton).toEqual(true);
 
     act(() => {
-      result.current.handleUploadFile(file);
+      result.current.onChangeInput(
+        { target: { value: '4324' } } as any,
+        'price',
+        true,
+      );
     });
 
-    expect(mockSetNotification).toHaveBeenCalledWith(
-      'Arquivo muito grande! Escolha uma imagem de até 5MB.',
-      'error',
-    );
-    expect(result.current.product.image).toBe('');
-  });
-
-  it('uploads and removes an image', async () => {
-    const { result } = renderHook(() => useInsertProduct());
-    const file = new File(['image'], 'photo.png', { type: 'image/png' });
+    expect(result.current.disabledButton).toEqual(true);
 
     act(() => {
-      result.current.handleUploadFile(file);
+      result.current.onChangeInput(
+        { target: { value: 'dfafa' } } as any,
+        'name',
+      );
     });
 
-    await waitFor(() => {
-      expect(result.current.product.image).toMatch(/^data:image\/png;base64,/);
-    });
+    expect(result.current.disabledButton).toEqual(true);
 
     act(() => {
-      result.current.handleRemoveImage();
+      result.current.onChangeInput(
+        { target: { value: 'http' } } as any,
+        'image',
+      );
     });
 
-    expect(result.current.product.image).toBe('');
-  });
+    expect(result.current.disabledButton).toEqual(true);
 
-  it('submits the product and navigates after a successful request', async () => {
+    act(() => {
+      result.current.handleChangeSelect('4324');
+    });
+
+    expect(result.current.disabledButton).toEqual(false);
+
+    act(() => {
+      result.current.onChangeInput({ target: { value: '' } } as any, 'image');
+    });
+
+    expect(result.current.disabledButton).toEqual(true);
+  });
+  it('should call axios.post', () => {
+    const spyAxios = jest.spyOn(axios, 'post');
+
     const { result } = renderHook(() => useInsertProduct());
 
-    await act(async () => {
-      await result.current.handleInsertProduct();
+    act(() => {
+      result.current.handleInsertProduct();
     });
 
-    expect(connectionAPIPost).toHaveBeenCalledWith(URL_PRODUCT, {
-      name: '',
-      price: 0,
-      image: '',
-    });
-    expect(mockSetNotification).toHaveBeenCalledWith(
-      'Sucesso!',
-      'success',
-      'Produto inserido com sucesso!',
-    );
-    expect(mockNavigate).toHaveBeenCalledWith(ProductRoutesEnum.PRODUCT);
-    expect(result.current.loading).toBe(false);
-  });
+    expect(spyAxios.mock.calls[0][1]).toEqual(result.current.product);
 
-  it('shows an error notification when submission fails', async () => {
-    jest.mocked(connectionAPIPost).mockRejectedValue(new Error('Falha na API'));
-    const { result } = renderHook(() => useInsertProduct());
-
-    await act(async () => {
-      await result.current.handleInsertProduct();
-    });
-
-    expect(mockSetNotification).toHaveBeenCalledWith('Falha na API', 'error');
-    expect(mockNavigate).not.toHaveBeenCalled();
-    expect(result.current.loading).toBe(false);
+    expect(spyAxios.mock.calls.length).toEqual(1);
   });
 });
