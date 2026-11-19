@@ -7,10 +7,10 @@ import orderReducer from './reducers/orderReducer';
 
 export const store = configureStore({
   reducer: {
-    productReducer,
     categoryReducer,
     globalReducer,
     orderReducer,
+    productReducer,
   },
 });
 

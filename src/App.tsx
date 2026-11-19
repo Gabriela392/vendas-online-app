@@ -15,7 +15,7 @@ import {
 } from 'react-router-dom';
 import { productScreens } from './modules/product/routes';
 import { useUser } from './store/reducers/globalReducer/useGlobalReducer';
-import { orderScreens } from './modules/order/routes';
+import { orderScreens } from './modules/orders/routes';
 
 const routes: RouteObject[] = [...loginRoutes];
 const routesLoggedIn: RouteObject[] = [

@@ -1,5 +1,4 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-
 import type { OrderType } from '../../types/OrderType';
 
 interface OrderState {
@@ -10,7 +9,7 @@ const initialState: OrderState = {
   orders: [],
 };
 
-export const orderSlice = createSlice({
+export const counterSlice = createSlice({
   name: 'orderReducer',
   initialState,
   reducers: {
@@ -20,6 +19,6 @@ export const orderSlice = createSlice({
   },
 });
 
-export const { setOrdersAction } = orderSlice.actions;
+export const { setOrdersAction } = counterSlice.actions;
 
-export default orderSlice.reducer;
+export default counterSlice.reducer;

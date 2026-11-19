@@ -11,8 +11,8 @@ import { memo, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ProductRoutesEnum } from '../../../modules/product/productRoutes';
 import { CategoryRoutesEnum } from '../../../modules/category/routes';
-import { OrderRoutesEnum } from '../../../modules/order/orderRoutes';
 import { MenuContainer } from './menu.style';
+import { OrderRoutesEnum } from '../../../modules/orders/routes';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
