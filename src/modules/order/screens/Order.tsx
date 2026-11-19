@@ -1,0 +1,52 @@
+import type { ColumnsType } from 'antd/es/table';
+
+import Screen from '../../../shared/components/screen/Screen';
+import Table from '../../../shared/components/table/Table';
+import { useOrder } from '../hooks/useOrder';
+
+const Order = () => {
+  const { orders } = useOrder();
+  const columns: ColumnsType<(typeof orders)[number]> = [
+    {
+      title: 'Id',
+      dataIndex: 'id',
+      key: 'id',
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: 'Data',
+      dataIndex: 'date',
+      key: 'date',
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: 'Usuário',
+      dataIndex: 'user',
+      key: 'user',
+      render: (_, target) => <a>{target.user?.name}</a>,
+    },
+    {
+      title: 'Qtd. Produtos',
+      dataIndex: 'amountProducts',
+      key: 'amountProducts',
+      render: (text) => <a>{text}</a>,
+    },
+  ];
+
+  return (
+    <Screen
+      listBreadcrumb={[
+        {
+          name: 'HOME',
+        },
+        {
+          name: 'PEDIDOS',
+        },
+      ]}
+    >
+      <Table columns={columns} dataSource={orders} />
+    </Screen>
+  );
+};
+
+export default Order;

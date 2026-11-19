@@ -11,6 +11,7 @@ import { memo, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ProductRoutesEnum } from '../../../modules/product/productRoutes';
 import { CategoryRoutesEnum } from '../../../modules/category/routes';
+import { OrderRoutesEnum } from '../../../modules/order/orderRoutes';
 import { MenuContainer } from './menu.style';
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -60,6 +61,7 @@ const Menu = () => {
         key: 'order',
         label: 'Pedidos',
         icon: <SafetyCertificateOutlined />,
+        onClick: () => navigate(OrderRoutesEnum.ORDER),
       },
       {
         key: 'user',

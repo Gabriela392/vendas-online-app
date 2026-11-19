@@ -15,12 +15,14 @@ import {
 } from 'react-router-dom';
 import { productScreens } from './modules/product/routes';
 import { useUser } from './store/reducers/globalReducer/useGlobalReducer';
+import { orderScreens } from './modules/order/routes';
 
 const routes: RouteObject[] = [...loginRoutes];
 const routesLoggedIn: RouteObject[] = [
   ...productScreens,
   ...categoryScreens,
   ...firstScreenRoutes,
+  ...orderScreens,
 ].map((route) => ({
   ...route,
   loader: verifyLoggedIn,

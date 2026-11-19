@@ -1,11 +1,13 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Modal } from 'antd';
+
 import { logout } from '../../functions/connection/auth';
+import { HeaderTestIdEnum } from '../../enums/headerTestIdEnum';
 import { HeadContainer, IconExit } from './header.style';
 
-import { useState } from 'react';
-import { Modal } from 'antd';
-import { HeaderTestIdEnum } from '../../enums/headerTestIdEnum';
-
 const Header = () => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
   const showModal = () => {
@@ -15,13 +17,14 @@ const Header = () => {
   const hideModal = () => {
     setOpen(false);
   };
+
   return (
     <>
       <Modal
         data-testid={HeaderTestIdEnum.HEADER_MODAL}
         title=""
         open={open}
-        onOk={logout}
+        onOk={() => logout(navigate)}
         onCancel={hideModal}
         okText="Sim"
         cancelText="Cancelar"
