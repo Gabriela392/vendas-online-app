@@ -11,11 +11,7 @@ export const useOrderDetail = (orderId?: string) => {
 
   useEffect(() => {
     if (orderId) {
-      request<OrderType>(
-        URL_ORDER_ID.replace('{orderId}', orderId),
-        MethodsEnum.GET,
-        setOrder,
-      );
+      request<OrderType>(URL_ORDER_ID(orderId), MethodsEnum.GET, setOrder);
     }
   }, [orderId, request, setOrder]);
 

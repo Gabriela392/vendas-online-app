@@ -1,11 +1,12 @@
+import type { FC } from 'react';
 import { useParams } from 'react-router-dom';
-import { Descriptions, Divider, Spin } from 'antd';
+import { Descriptions, Divider, Flex, Spin } from 'antd';
 import Screen from '../../../shared/components/screen/Screen';
 import { OrderRoutesEnum } from '../routes';
 import { useOrderDetail } from '../hooks/useOrderDetail';
 import { convertNumberToMoney } from '../../../shared/functions/connection/money';
 
-const OrderDetail = () => {
+const OrderDetail: FC = () => {
   const { orderId } = useParams<{ orderId: string }>();
   const { order, loading } = useOrderDetail(orderId);
 
@@ -25,7 +26,9 @@ const OrderDetail = () => {
       ]}
     >
       {loading ? (
-        <Spin />
+        <Flex justify="center" align="center" style={{ minHeight: 300 }}>
+          <Spin size="large" />
+        </Flex>
       ) : (
         <>
           <Descriptions title="Dados do usuário" bordered>
