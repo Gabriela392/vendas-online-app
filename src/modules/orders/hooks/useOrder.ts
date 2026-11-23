@@ -9,10 +9,8 @@ export const useOrder = () => {
   const { orders, setOrders } = useOrderReducer();
 
   useEffect(() => {
-    if (!orders) {
-      request(URL_ORDER_ALL, MethodsEnum.GET, setOrders);
-    }
-  });
+    request(URL_ORDER_ALL, MethodsEnum.GET, setOrders);
+  }, [request, setOrders]);
 
   return {
     orders,

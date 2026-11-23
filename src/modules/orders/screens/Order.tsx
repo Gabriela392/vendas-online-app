@@ -3,6 +3,8 @@ import type { OrderType } from '../../../store/types/OrderType';
 import Table from 'antd/es/table';
 import Screen from '../../../shared/components/screen/Screen';
 import { useOrder } from '../hooks/useOrder';
+import { useNavigate } from 'react-router-dom';
+import { OrderRoutesEnum } from '../routes';
 
 const columns: ColumnsType<OrderType> = [
   {
@@ -33,6 +35,7 @@ const columns: ColumnsType<OrderType> = [
 
 const Order = () => {
   const { orders } = useOrder();
+  const navigate = useNavigate();
 
   return (
     <Screen
@@ -45,7 +48,15 @@ const Order = () => {
         },
       ]}
     >
-      <Table columns={columns} dataSource={orders} />
+      <Table
+        rowKey="id"
+        onRow={(record) => ({
+          onClick: () => navigate(`${OrderRoutesEnum.ORDER}/${record.id}`),
+          style: { cursor: 'pointer' },
+        })}
+        columns={columns}
+        dataSource={orders}
+      />
     </Screen>
   );
 };
