@@ -1,6 +1,6 @@
 import type { ColumnsType } from 'antd/es/table';
 import type { OrderType } from '../../../store/types/OrderType';
-import Table from 'antd/es/table';
+import Table from '../../../shared/components/table/Table';
 import Screen from '../../../shared/components/screen/Screen';
 import { useOrder } from '../hooks/useOrder';
 import { useNavigate } from 'react-router-dom';

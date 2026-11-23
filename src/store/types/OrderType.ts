@@ -1,23 +1,56 @@
 import type { UserType } from '../../modules/login/types/UserType';
 
+export interface AddressType {
+  id: number;
+  complement: string;
+  numberAddress: number;
+  cep: string;
+  city?: {
+    id: number;
+    name: string;
+    state?: {
+      id: number;
+      name: string;
+    };
+  };
+}
+
+export interface PaymentType {
+  id: number;
+  statusId: number;
+  price: number;
+  discount: number;
+  finalPrice: number;
+  type: string;
+  paymentStatus?: {
+    id: number;
+    name: string;
+  };
+}
+
+export interface OrderProductType {
+  id: number;
+  orderId: number;
+  productId: number;
+  amount: number;
+  price: number;
+  product?: {
+    id: number;
+    name: string;
+    price: number;
+    image: string;
+  };
+}
+
 export interface OrderType {
   id: number;
   date: string;
   userId: number;
-  user: UserType;
-  amountProducts: number;
+  addressId?: number;
+  paymentId?: number;
+  user?: UserType;
+  address?: AddressType;
+  payment?: PaymentType;
+  ordersProduct?: OrderProductType[];
+  amountProducts?: number;
 }
-
-// "id": 2,
-//         "date": "Mon Feb 12 2005 20 20:07:01 GMT-0300 (Brasilia Standard Time)",
-//         "userID": 2,
-//         "adressId": 1,
-//         "paymentId": 6,
-//         "user": {
-//             "id": 2,
-//             "name": "Gabiela Caetano",
-//             "email": "gabrielacaetano@.com",
-//             "phone": "81993813941"
-//             "cpf": "00000000000"
-//         },
-//         "amountProducts": 2

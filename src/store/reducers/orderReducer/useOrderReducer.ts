@@ -2,11 +2,11 @@ import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../hooks';
 import type { OrderType } from '../../types/OrderType';
-import { setOrdersAction } from '.';
+import { setOrdersAction, setOrderAction } from '.';
 
 export const useOrderReducer = () => {
   const dispatch = useDispatch();
-  const { orders } = useAppSelector((state) => state.orderReducer);
+  const { orders, order } = useAppSelector((state) => state.orderReducer);
 
   const setOrders = useCallback(
     (orders: OrderType[]) => {
@@ -15,8 +15,17 @@ export const useOrderReducer = () => {
     [dispatch],
   );
 
+  const setOrder = useCallback(
+    (order?: OrderType) => {
+      dispatch(setOrderAction(order));
+    },
+    [dispatch],
+  );
+
   return {
     orders,
     setOrders,
+    order,
+    setOrder,
   };
 };
