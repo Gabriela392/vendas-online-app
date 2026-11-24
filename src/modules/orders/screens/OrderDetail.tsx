@@ -14,6 +14,16 @@ import { insertMaskInCEP } from '../../../shared/functions/address';
 const OrderDetail = () => {
   const { orderId } = useParams<{ orderId: string }>();
   const { order, loading } = useOrderDetail(orderId);
+  const orderItemsTotalInCents = (order?.ordersProduct || []).reduce(
+    (total, orderProduct) =>
+      total +
+      Math.round(Number(orderProduct.price) * 100) * orderProduct.amount,
+    0,
+  );
+  const paymentPriceInCents = order?.ordersProduct?.length
+    ? orderItemsTotalInCents
+    : Math.round((order?.payment?.price || 0) * 100);
+  const discountInCents = Math.round((order?.payment?.discount || 0) * 100);
 
   console.log('order', order);
   console.log('loading', loading);
@@ -56,13 +66,15 @@ const OrderDetail = () => {
           <Divider />
           <Descriptions title="Dados do pagamento" bordered>
             <Descriptions.Item label="Preço">
-              {convertNumberToMoney(order.payment?.price || 0)}
+              {convertNumberToMoney(paymentPriceInCents / 100)}
             </Descriptions.Item>
             <Descriptions.Item label="Desconto" span={2}>
               {convertNumberToMoney(order.payment?.discount || 0)}
             </Descriptions.Item>
             <Descriptions.Item label="Preço Final">
-              {convertNumberToMoney(order.payment?.finalPrice || 0)}
+              {convertNumberToMoney(
+                (paymentPriceInCents - discountInCents) / 100,
+              )}
             </Descriptions.Item>
             <Descriptions.Item label="Tipo de pagamento" span={2}>
               {order.payment?.type}
