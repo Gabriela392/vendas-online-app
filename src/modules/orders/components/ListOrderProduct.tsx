@@ -6,9 +6,9 @@ import Table from 'antd/es/table';
 const columns: ColumnsType<OrderProductType> = [
   {
     title: 'nome produto',
-    dataIndex: 'name',
+    dataIndex: ['product', 'name'],
     key: 'name',
-    render: (target) => <a>{target.product?.name}</a>,
+    render: (_, target) => <a>{target.product?.name}</a>,
   },
   {
     title: 'Quantidade',
