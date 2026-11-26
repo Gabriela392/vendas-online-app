@@ -11,8 +11,14 @@ import { memo, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ProductRoutesEnum } from '../../../modules/product/productRoutes';
 import { CategoryRoutesEnum } from '../../../modules/category/routes';
-import { MenuContainer } from './menu.style';
+import {
+  MenuContainer,
+  MenuContainerLogoName,
+  MenuLogo,
+  NameCompany,
+} from './menu.style';
 import { OrderRoutesEnum } from '../../../modules/orders/routes';
+import { UserRoutesEnum } from '../../../modules/user/routes';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -67,6 +73,7 @@ const Menu = () => {
         key: 'user',
         label: 'Clientes',
         icon: <UserOutlined />,
+        onClick: () => navigate(UserRoutesEnum.USER),
       },
     ],
     [navigate],
@@ -76,7 +83,13 @@ const Menu = () => {
 
   return (
     <MenuContainer>
-      {/* ...igual... */}
+      <MenuContainerLogoName>
+        <MenuLogo
+          src={`${import.meta.env?.BASE_URL ?? '/'}logo.png`}
+          alt="Logo Vendas Online"
+        />
+        <NameCompany>Vendas Online</NameCompany>
+      </MenuContainerLogoName>
       <MenuAntd
         theme="dark"
         onClick={onClick}

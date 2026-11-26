@@ -9,7 +9,13 @@ interface BaseInputProps extends InputProps {
   title?: string;
 }
 
-const Input = ({ value, onChange, margin, title, ...props }: BaseInputProps) => {
+const Input = ({
+  value,
+  onChange,
+  margin,
+  title,
+  ...props
+}: BaseInputProps) => {
   return (
     <div style={{ width: '100%', margin }}>
       {title && <div style={{ marginBottom: 8 }}>{title}</div>}
@@ -18,4 +24,11 @@ const Input = ({ value, onChange, margin, title, ...props }: BaseInputProps) => 
   );
 };
 
-export default Input;
+type InputComponent = typeof Input & {
+  Search: typeof AntdInput.Search;
+};
+
+const InputWithSearch = Input as InputComponent;
+InputWithSearch.Search = AntdInput.Search;
+
+export default InputWithSearch;

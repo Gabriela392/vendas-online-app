@@ -16,6 +16,7 @@ import {
 import { productScreens } from './modules/product/routes';
 import { useUser } from './store/reducers/globalReducer/useGlobalReducer';
 import { orderScreens } from './modules/orders/routes';
+import { userScreens } from './modules/user/routes';
 
 const routes: RouteObject[] = [...loginRoutes];
 const routesLoggedIn: RouteObject[] = [
@@ -23,6 +24,7 @@ const routesLoggedIn: RouteObject[] = [
   ...categoryScreens,
   ...firstScreenRoutes,
   ...orderScreens,
+  ...userScreens,
 ].map((route) => ({
   ...route,
   loader: verifyLoggedIn,
@@ -38,7 +40,7 @@ function App() {
 
   useEffect(() => {
     request(URL_USER, MethodsEnum.GET, setUser);
-  }, []);
+  }, [request, setUser]);
 
   return (
     <>

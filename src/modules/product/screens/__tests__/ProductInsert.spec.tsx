@@ -4,11 +4,9 @@ import { mockProductInsert } from '../../__mocks__/productInsert.mock';
 import { ProductInsertTestIdEnum } from '../../enum/ProductInsertTestIdEnum';
 import ProductInsert from '../ProductInsert';
 
-const mockNavigate = jest.fn();
-
-jest.mock('react-router-dom', () => ({
-  useNavigate: () => mockNavigate,
-}));
+const mockNavigate = (
+  globalThis as typeof globalThis & { __mockNavigate: jest.Mock }
+).__mockNavigate;
 
 jest.mock('../../../category/hooks/useCategory', () => ({
   useCategory: () => ({

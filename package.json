@@ -9,8 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "prepare": "husky",
-    "test": "jest",
-    "test:cov": "jest --coverage"
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
+    "test:cov": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --coverage"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -49,6 +49,7 @@
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
     "axios-mock-adapter": "^2.1.0",
+    "babel-jest": "^30.5.2",
     "babel-plugin-styled-components": "^2.3.1",
     "eslint": "^10.13.0",
     "eslint-config-prettier": "^10.1.8",
@@ -70,9 +71,15 @@
     "testMatch": [
       "**/?(*.)+(spec|test).[jt]s?(x)"
     ],
+    "transform": {
+      "^.+\\.[jt]sx?$": "babel-jest"
+    },
     "transformIgnorePatterns": [
       "/node_modules/(?!@ant-design/colors/)"
     ],
+    "moduleNameMapper": {
+      "^@ant-design/icons$": "<rootDir>/src/__mocks__/ant-design-icons.js"
+    },
     "setupFilesAfterEnv": [
       "<rootDir>/setup-tests.js"
     ],
