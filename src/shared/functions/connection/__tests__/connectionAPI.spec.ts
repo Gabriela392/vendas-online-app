@@ -9,6 +9,7 @@ import ConnectionAPI, {
   connectionAPIPost,
   connectionAPIPut,
 } from '../connectionAPI';
+import { unsetAuthorizationToken } from '../auth';
 
 const mockAxios = new MockAdapter(axios);
 
@@ -18,9 +19,15 @@ const BODY_MOCK = { name: 'BODY_MOCK' };
 
 jest.mock('../auth', () => ({
   getAuthorizationToken: () => mockToken,
+  unsetAuthorizationToken: jest.fn(),
 }));
 
 describe('connectionAPI function', () => {
+  beforeEach(() => {
+    mockAxios.reset();
+    jest.clearAllMocks();
+  });
+
   describe('connectionAPIGet', () => {
     it('should success get', async () => {
       const spyAxios = jest.spyOn(axios, 'get');
@@ -104,6 +111,8 @@ describe('connectionAPI function', () => {
       await expect(
         ConnectionAPI.connect(URL_AUTH, MethodsEnum.GET),
       ).rejects.toThrow();
+
+      expect(unsetAuthorizationToken).toHaveBeenCalled();
     });
 
     it('should return error 403', async () => {
@@ -112,6 +121,8 @@ describe('connectionAPI function', () => {
       await expect(
         ConnectionAPI.connect(URL_AUTH, MethodsEnum.GET),
       ).rejects.toThrow();
+
+      expect(unsetAuthorizationToken).not.toHaveBeenCalled();
     });
 
     it('should return error 400', async () => {

@@ -44,11 +44,12 @@ export default class ConnectionAPI {
       if (error.response) {
         switch (error.response.status) {
           case 401:
-          case 403:
             unsetAuthorizationToken();
             if (location.pathname !== '/login') {
               location.href = '/login';
             }
+            throw new Error(ERROR_ACCESS_DANIED);
+          case 403:
             throw new Error(ERROR_ACCESS_DANIED);
           default: {
             const message = error.response.data?.message;

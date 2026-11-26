@@ -11,6 +11,9 @@ import { LimitedContainer } from '../../login/styles/loginScreen.styles';
 import type { UserType } from '../../login/types/UserType';
 import { useUser } from '../hooks/useUser';
 import Screen from '../../../shared/components/screen/Screen';
+import { useMemo } from 'react';
+import { getUserInfoByToken } from '../../../shared/functions/connection/auth';
+import { UserTypeEnum } from '../../../shared/enums/userType.enum';
 
 const { Search } = Input;
 
@@ -50,6 +53,8 @@ const columns: ColumnsType<UserType> = [
 const User = () => {
   const { users, loading, handleOnChangeSearch } = useUser();
 
+  const userToken = useMemo(() => getUserInfoByToken(), []);
+
   return (
     <Screen
       listBreadcrumb={[
@@ -75,10 +80,13 @@ const User = () => {
                 enterButton
               />
             </LimitedContainer>
-            <LimitedContainer style={{ width: 120 }}>
-              <Button type="primary" onClick={() => null}>
-                Inserir
-              </Button>
+            <LimitedContainer style={{ width: 180 }}>
+              {(userToken?.typeUser === UserTypeEnum.Root ||
+                userToken?.typeUser === UserTypeEnum.Admin) && (
+                <Button type="primary" onClick={() => null}>
+                  Inserir Admin
+                </Button>
+              )}
             </LimitedContainer>
           </DisplayFlexJustifyBetween>
           <Table columns={columns} dataSource={users} />

@@ -9,6 +9,7 @@ import {
   setItemStorage,
 } from './storageProxy';
 import { LoginRoutesEnum } from '../../../modules/login/routes';
+import type { UserTokenType } from '../../../modules/login/types/UserToken';
 
 export const unsetAuthorizationToken = () =>
   removeItemStorage(AUTHORIZATION_KEY);
@@ -20,6 +21,17 @@ export const setAuthorizationToken = (token?: string) => {
 };
 
 export const getAuthorizationToken = () => getItemStorage(AUTHORIZATION_KEY);
+
+export const getUserInfoByToken = (): UserTokenType | undefined => {
+  const token = getAuthorizationToken();
+  const tokenSplited = token?.split('.');
+
+  if (tokenSplited && tokenSplited.length > 1) {
+    return JSON.parse(window.atob(tokenSplited[1]));
+  }
+
+  return undefined;
+};
 
 export const verifyLoggedIn = async () => {
   const token = getAuthorizationToken();
