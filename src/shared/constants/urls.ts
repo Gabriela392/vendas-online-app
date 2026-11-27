@@ -12,3 +12,6 @@ export const URL_ORDER_ALL = 'http://localhost:8080/order/all';
 
 export const URL_ORDER_ID = (orderId: string) =>
   `http://localhost:8080/order/${orderId}`;
+
+export const URL_PRODUCT_ID = (productId: string) =>
+  `http://localhost:8080/product/${productId}`;
