@@ -11,6 +11,11 @@ type InsertProduct = {
   price: number;
   image: string;
   categoryId?: number;
+  weight: number;
+  length: number;
+  height: number;
+  width: number;
+  diameter: number;
 };
 
 export const useInsertProduct = () => {
@@ -21,6 +26,11 @@ export const useInsertProduct = () => {
     name: '',
     price: 0,
     image: '',
+    weight: 0,
+    length: 0,
+    height: 0,
+    width: 0,
+    diameter: 0,
   });
   const disabledButton = !(
     product.name &&

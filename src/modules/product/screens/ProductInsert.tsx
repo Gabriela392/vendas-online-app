@@ -1,26 +1,20 @@
-import { useState } from 'react';
-import { Select as AntdSelect, Radio, Upload, Image } from 'antd';
-import {
-  UploadOutlined,
-  LinkOutlined,
-  DeleteOutlined,
-} from '@ant-design/icons';
+import { Input, Select, Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
-
-import Button from '../../../shared/components/buttons/button/Button';
-import Input from '../../../shared/components/inputs/input';
 import InputMoney from '../../../shared/components/inputs/inputMoney/InputMoney';
-import Screen from '../../../shared/components/screen/Screen';
-import { DisplayFlexJustifyRight } from '../../../shared/components/styles/display.style';
-import { ProductRoutesEnum } from '../productRoutes';
-import { useInsertProduct } from '../hooks/useInsertProduct';
-import { useCategory } from '../../category/hooks/useCategory';
-import { LimitedContainer } from '../../../shared/components/styles/limited.styled';
-import { ProductInsertTestIdEnum } from '../enum/ProductInsertTestIdEnum';
+import {
+  DisplayFlexJustifyCenter,
+  DisplayFlex,
+  DisplayFlexJustifyRight,
+} from '../../../shared/components/styles/display.style';
 import type { CategoryType } from '../../../shared/types/CategoryType';
+import { useCategory } from '../../category/hooks/useCategory';
+import { LimitedContainer } from '../../login/styles/loginScreen.styles';
+import { ProductInsertTestIdEnum } from '../enum/ProductInsertTestIdEnum';
+import { useInsertProduct } from '../hooks/useInsertProduct';
+import { ProductRoutesEnum } from '../productRoutes';
+import Screen from '../../../shared/components/screen/Screen';
 
 const ProductInsert = () => {
-  const [imageType, setImageType] = useState<'url' | 'file'>('url');
   const {
     product,
     loading,
@@ -28,8 +22,6 @@ const ProductInsert = () => {
     onChangeInput,
     handleInsertProduct,
     handleChangeSelect,
-    handleUploadFile,
-    handleRemoveImage,
   } = useInsertProduct();
   const { categories } = useCategory();
   const navigate = useNavigate();
@@ -53,107 +45,26 @@ const ProductInsert = () => {
         },
       ]}
     >
-      <DisplayFlexJustifyRight
+      <DisplayFlexJustifyCenter
         data-testid={ProductInsertTestIdEnum.PRODUCT_INSERT_CONTAINER}
       >
-        <LimitedContainer width={400}>
+        <LimitedContainer style={{ width: 400 }}>
           <Input
             data-testid={ProductInsertTestIdEnum.PRODUCT_INPUT_NAME}
             onChange={(event) => onChangeInput(event, 'name')}
             value={product.name}
-            margin="0px 0px 16px 0px"
+            style={{ margin: '0px 0px 16px 0px' }}
             title="Nome"
             placeholder="Nome"
           />
-
-          <div style={{ marginBottom: 16 }}>
-            <div style={{ marginBottom: 8, fontWeight: 500 }}>
-              Imagem do Produto
-            </div>
-            <Radio.Group
-              value={imageType}
-              onChange={(e) => setImageType(e.target.value)}
-              style={{ marginBottom: 12 }}
-            >
-              <Radio.Button value="url">
-                <LinkOutlined style={{ marginRight: 6 }} /> URL da imagem
-              </Radio.Button>
-              <Radio.Button value="file">
-                <UploadOutlined style={{ marginRight: 6 }} /> Arquivo de foto
-              </Radio.Button>
-            </Radio.Group>
-
-            {imageType === 'url' ? (
-              <Input
-                data-testid={ProductInsertTestIdEnum.PRODUCT_INPUT_IMAGE}
-                onChange={(event) => onChangeInput(event, 'image')}
-                value={product.image.startsWith('data:') ? '' : product.image}
-                margin="0px 0px 8px 0px"
-                placeholder="https://exemplo.com/foto.jpg"
-              />
-            ) : (
-              <div style={{ marginBottom: 8 }}>
-                <Upload
-                  accept="image/*"
-                  showUploadList={false}
-                  beforeUpload={(file) => {
-                    handleUploadFile(file);
-                    return false;
-                  }}
-                >
-                  <Button icon={<UploadOutlined />}>
-                    {product.image.startsWith('data:')
-                      ? 'Trocar arquivo de foto'
-                      : 'Escolher foto do computador'}
-                  </Button>
-                </Upload>
-              </div>
-            )}
-
-            {product.image && (
-              <div
-                style={{
-                  marginTop: 12,
-                  padding: 8,
-                  border: '1px dashed #d9d9d9',
-                  borderRadius: 8,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  backgroundColor: '#fafafa',
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <Image
-                    src={product.image}
-                    alt="Pré-visualização"
-                    width={56}
-                    height={56}
-                    style={{ objectFit: 'cover', borderRadius: 4 }}
-                  />
-                  <div>
-                    <div style={{ fontSize: 13, fontWeight: 500 }}>
-                      Pré-visualização
-                    </div>
-                    <div style={{ fontSize: 11, color: '#888' }}>
-                      {product.image.startsWith('data:')
-                        ? 'Foto carregada do arquivo'
-                        : 'Imagem via URL'}
-                    </div>
-                  </div>
-                </div>
-                <Button
-                  danger
-                  size="small"
-                  onClick={handleRemoveImage}
-                  icon={<DeleteOutlined />}
-                >
-                  Remover
-                </Button>
-              </div>
-            )}
-          </div>
-
+          <Input
+            data-testid={ProductInsertTestIdEnum.PRODUCT_INPUT_IMAGE}
+            onChange={(event) => onChangeInput(event, 'image')}
+            value={product.image}
+            style={{ margin: '0px 0px 16px 0px' }}
+            title="Url imagem"
+            placeholder="Url imagem"
+          />
           <InputMoney
             data-testid={ProductInsertTestIdEnum.PRODUCT_INPUT_PRICE}
             onChange={(event) => onChangeInput(event, 'price', true)}
@@ -162,20 +73,67 @@ const ProductInsert = () => {
             title="Preço"
             placeholder="Preço"
           />
-          <div style={{ marginBottom: 32 }}>
-            <div style={{ marginBottom: 8 }}>Categoria</div>
-            <AntdSelect
-              data-testid={ProductInsertTestIdEnum.PRODUCT_INPUT_SELECT}
-              style={{ width: '100%' }}
-              onChange={(value) => handleChangeSelect(String(value))}
-              options={categories.map((category: CategoryType) => ({
-                value: `${category.id}`,
-                label: category.name,
-              }))}
+          <Select
+            data-testid={ProductInsertTestIdEnum.PRODUCT_INPUT_SELECT}
+            title="Categoria"
+            style={{ margin: '0px 0px 16px 0px' }}
+            onChange={handleChangeSelect}
+            options={categories.map((category: CategoryType) => ({
+              value: `${category.id}`,
+              label: `${category.name}`,
+            }))}
+          />
+          <DisplayFlex>
+            <InputMoney
+              data-testid={ProductInsertTestIdEnum.PRODUCT_INPUT_IMAGE}
+              addonBefore="Kg"
+              onChange={(event) => onChangeInput(event, 'weight', true)}
+              value={product.weight}
+              margin="0px 16px 16px 0px"
+              title="Peso"
+              placeholder="Peso"
             />
-          </div>
+            <InputMoney
+              data-testid={ProductInsertTestIdEnum.PRODUCT_INPUT_IMAGE}
+              addonBefore="cm"
+              onChange={(event) => onChangeInput(event, 'length', true)}
+              value={product.length}
+              margin="0px 0px 16px 0px"
+              title="Comprimento"
+              placeholder="Comprimento"
+            />
+          </DisplayFlex>
+          <DisplayFlex>
+            <InputMoney
+              data-testid={ProductInsertTestIdEnum.PRODUCT_INPUT_IMAGE}
+              onChange={(event) => onChangeInput(event, 'height', true)}
+              value={product.height}
+              addonBefore="cm"
+              margin="0px 16px 16px 0px"
+              title="Altura"
+              placeholder="Altura"
+            />
+            <InputMoney
+              data-testid={ProductInsertTestIdEnum.PRODUCT_INPUT_IMAGE}
+              onChange={(event) => onChangeInput(event, 'width', true)}
+              value={product.width}
+              addonBefore="cm"
+              margin="0px 0px 16px 0px"
+              title="Largura"
+              placeholder="Largura"
+            />
+          </DisplayFlex>
+          <InputMoney
+            data-testid={ProductInsertTestIdEnum.PRODUCT_INPUT_IMAGE}
+            onChange={(event) => onChangeInput(event, 'diameter', true)}
+            value={product.diameter}
+            addonBefore="cm"
+            margin="0px 0px 32px 0px"
+            title="Diâmetro"
+            placeholder="Diâmetro"
+          />
           <DisplayFlexJustifyRight>
-            <LimitedContainer margin="0px 8px" width={120}>
+            <LimitedContainer style={{ width: 120, margin: '0px 8px' }}>
               <Button
                 data-testid={ProductInsertTestIdEnum.PRODUCT_BUTTON_CANCEL}
                 danger
@@ -184,7 +142,7 @@ const ProductInsert = () => {
                 Cancelar
               </Button>
             </LimitedContainer>
-            <LimitedContainer width={120}>
+            <LimitedContainer style={{ width: 120 }}>
               <Button
                 data-testid={ProductInsertTestIdEnum.PRODUCT_BUTTON_INSERT}
                 loading={loading}
@@ -197,7 +155,7 @@ const ProductInsert = () => {
             </LimitedContainer>
           </DisplayFlexJustifyRight>
         </LimitedContainer>
-      </DisplayFlexJustifyRight>
+      </DisplayFlexJustifyCenter>
     </Screen>
   );
 };
