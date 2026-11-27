@@ -14,6 +14,8 @@ import Screen from '../../../shared/components/screen/Screen';
 import { useMemo } from 'react';
 import { getUserInfoByToken } from '../../../shared/functions/connection/auth';
 import { UserTypeEnum } from '../../../shared/enums/userType.enum';
+import { useNavigate } from 'react-router-dom';
+import { UserRoutesEnum } from '../routes';
 
 const { Search } = Input;
 
@@ -52,8 +54,13 @@ const columns: ColumnsType<UserType> = [
 
 const User = () => {
   const { users, loading, handleOnChangeSearch } = useUser();
+  const navigate = useNavigate();
 
   const userToken = useMemo(() => getUserInfoByToken(), []);
+
+  const handleGoToInsertAdmin = () => {
+    navigate(UserRoutesEnum.USER_INSERT);
+  };
 
   return (
     <Screen
@@ -83,7 +90,7 @@ const User = () => {
             <LimitedContainer style={{ width: 180 }}>
               {(userToken?.typeUser === UserTypeEnum.Root ||
                 userToken?.typeUser === UserTypeEnum.Admin) && (
-                <Button type="primary" onClick={() => null}>
+                <Button type="primary" onClick={handleGoToInsertAdmin}>
                   Inserir Admin
                 </Button>
               )}
